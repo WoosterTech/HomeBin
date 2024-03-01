@@ -1,0 +1,93 @@
+version: '3'
+
+volumes:
+  homebin_local_postgres_data: {}
+  homebin_local_postgres_data_backups: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: homebin_local_django
+    container_name: homebin_local_django
+    depends_on:
+      - postgres
+      - redis
+      - mailpit
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - '8000:8000'
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: homebin_production_postgres
+    container_name: homebin_local_postgres
+    volumes:
+      - homebin_local_postgres_data:/var/lib/postgresql/data
+      - homebin_local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+
+  docs:
+    image: homebin_local_docs
+    container_name: homebin_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./homebin:/app/homebin:z
+    ports:
+      - '9000:9000'
+    command: /start-docs
+
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    container_name: homebin_local_mailpit
+    ports:
+      - "8025:8025"
+
+  redis:
+    image: docker.io/redis:6
+    container_name: homebin_local_redis
+
+  celeryworker:
+    <<: *django
+    image: homebin_local_celeryworker
+    container_name: homebin_local_celeryworker
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
+    ports: []
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: homebin_local_celerybeat
+    container_name: homebin_local_celerybeat
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
+    ports: []
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: homebin_local_flower
+    container_name: homebin_local_flower
+    ports:
+      - '5555:5555'
+    command: /start-flower

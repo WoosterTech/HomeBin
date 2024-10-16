@@ -89,6 +89,7 @@ loguru = "^0.7.2"
 pydantic = "^2.9.2"
 typeid-python = "^0.3.1"
 django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", allow-prereleases = true, platform = "linux"}
+psycopg = {extras = ["binary"], version = "^3.2.3"}
 
 
 [tool.poetry.group.dev]

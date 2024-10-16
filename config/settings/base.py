@@ -87,6 +87,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.mfa",
     "allauth.socialaccount",
+    "django_rubble",
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
@@ -94,8 +95,10 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    "homebin.assets",
+    "homebin.attachments",
+    "homebin.locations",
     "homebin.users",
-    # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

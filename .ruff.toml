@@ -85,4 +85,4 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [lint.isort]
-force-single-line = true
+force-single-line = false

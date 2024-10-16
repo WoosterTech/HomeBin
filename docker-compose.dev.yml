@@ -1,0 +1,15 @@
+services:
+  db:
+    image: docker.io/postgres:16
+    container_name: homebin_local_db
+    ports:
+      - '32769:5432'
+    env_file:
+      - ./.env
+
+
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    container_name: homebin_local_mailpit
+    ports:
+      - '8025:8025'

@@ -86,6 +86,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.mfa",
     "allauth.socialaccount",
+    "django_cotton",
     "django_rubble",
     "rest_framework",
     "rest_framework.authtoken",

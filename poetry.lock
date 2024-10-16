@@ -756,6 +756,20 @@ asgiref = ">=3.6"
 django = ">=3.2"
 
 [[package]]
+name = "django-cotton"
+version = "1.2.1"
+description = "Bringing component based design to Django templates."
+optional = false
+python-versions = "<4,>=3.8"
+files = [
+    {file = "django_cotton-1.2.1-py3-none-any.whl", hash = "sha256:395b7b6e0b00206be762bc9f20ac6a56e960e24d5ebaf4fb41ac08929f58c4dc"},
+    {file = "django_cotton-1.2.1.tar.gz", hash = "sha256:2ad65df214104e6103ea55d134c3d971e3887ead3bc9a92fed713249561572f9"},
+]
+
+[package.dependencies]
+django = ">=4.2,<5.2"
+
+[[package]]
 name = "django-coverage-plugin"
 version = "3.1.0"
 description = "Django template coverage.py plugin"
@@ -3570,4 +3584,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "c1a0c8c2ca53a5e85e93c498743b52f622e660d7e76421f423e281fee85e3e60"
+content-hash = "90a8887216500b9d6f9e838dd3ec0ef57e62fe4ee710383fda74c4b843f4859f"

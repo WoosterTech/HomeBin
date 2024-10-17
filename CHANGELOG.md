@@ -1,3 +1,10 @@
+## 0.2.0a1 (2024-10-17)
+
+### Fix
+
+- **secrets**: add `.secret_value` to `get_secret` calls
+- **django-rubble**: add missing extra `django-simple-history`
+
 ## 0.2.0a0 (2024-10-16)
 
 ### Feat

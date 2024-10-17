@@ -906,6 +906,20 @@ reference = "HEAD"
 resolved_reference = "8e43e4a991079a224566da24717db2db909b3f1b"
 
 [[package]]
+name = "django-simple-history"
+version = "3.7.0"
+description = "Store model history and view/revert changes from admin site."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django_simple_history-3.7.0-py3-none-any.whl", hash = "sha256:282cb2c4aa63f51547f17da7f2130abaa81ba01694676d19b88d52c94a57a52c"},
+    {file = "django_simple_history-3.7.0.tar.gz", hash = "sha256:ac3b7ca8b0d33f7ea6be8fe7fc98cf43415efa500ff5dfe736fbd1ebc0cf39f9"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+
+[[package]]
 name = "django-storages"
 version = "1.14.4"
 description = "Support for many storage backends in Django"
@@ -3674,4 +3688,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b2cf2f841a5e183bdf58658d72c6eae5e9bfc725d7d6a03ff1c4f94627baf2a7"
+content-hash = "cdb46874ee6e562dd12a93eaab0b0ec12708836b3019f83d5069c5190ad06217"

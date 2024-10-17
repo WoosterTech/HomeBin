@@ -7,7 +7,7 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
 from .base import *  # noqa: F403
-from .base import DATABASES, INSTALLED_APPS, SPECTACULAR_SETTINGS, env, secrets
+from .base import DATABASES, INSTALLED_APPS, SPECTACULAR_SETTINGS, env, logger, secrets
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -92,6 +92,8 @@ AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
 AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
 aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+AWS_DEFAULT_ACL = env("DJANGO_AWS_DEFAULT_ACL", default="private")
+logger.info(f"Default ACL: {AWS_DEFAULT_ACL}")
 # STATIC & MEDIA
 # ------------------------
 STORAGES = {

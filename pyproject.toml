@@ -92,6 +92,7 @@ django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", allow
 psycopg = {extras = ["binary"], version = "^3.2.3"}
 django-simple-history = "^3.7.0"  # dependency of django-rubble[django-simple-history] but not getting installed properly
 django-cotton = "^1.2.1"
+django-admin-thumbnails = "^0.2.9"
 
 
 [tool.poetry.group.dev]

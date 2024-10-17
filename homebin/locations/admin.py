@@ -1,3 +1,4 @@
+import admin_thumbnails
 from django.contrib import admin
 
 from homebin.locations.models import Container, Location
@@ -6,6 +7,7 @@ from homebin.locations.models import Container, Location
 admin.site.register(Location)
 
 
+@admin_thumbnails.thumbnail("attachment_image")
 class ContainerAttachmentInline(admin.TabularInline):
     model = Container.attachments.through
     extra = 1

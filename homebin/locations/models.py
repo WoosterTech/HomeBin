@@ -97,3 +97,10 @@ class ContainerAttachment(models.Model):
         if self._state.adding:
             self.rank = self.container.attachments.count()
         super().save(*args, **kwargs)
+
+    @property
+    def attachment_image(self):
+        attachment = self.attachment
+        if attachment.type == "image":
+            return attachment.attachment
+        return None

@@ -667,6 +667,23 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-admin-thumbnails"
+version = "0.2.9"
+description = "A Django app for DRY thumbnails in admin list views and forms."
+optional = false
+python-versions = "<4,>=2.6"
+files = [
+    {file = "django-admin-thumbnails-0.2.9.tar.gz", hash = "sha256:264ed1be50779108e3164006eff6bce9e2e41f584dc526a47bc99c9a98cb953e"},
+]
+
+[package.dependencies]
+Django = ">=1.10"
+six = ">=1.12.0"
+
+[package.extras]
+dev = ["flake8 (>=3.7.7)", "setuptools (>=41.0.0)", "twine (>=1.13.0)", "wheel (>=0.33.1)"]
+
+[[package]]
 name = "django-allauth"
 version = "65.0.2"
 description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication."
@@ -3688,4 +3705,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "cdb46874ee6e562dd12a93eaab0b0ec12708836b3019f83d5069c5190ad06217"
+content-hash = "7138d11a9458a834c9f414d2ddcb2ad61857d6e0eb2529bae11be0c70a4a11d2"

@@ -80,10 +80,12 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
+    "jazzmin",  # must be before django.contrib.admin
     "django.contrib.admin",
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
+    "adminsortable2",
     "crispy_forms",
     "crispy_bootstrap5",
     "allauth",

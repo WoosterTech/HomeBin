@@ -1,8 +1,12 @@
+import logging
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_rubble.models.history_models import HistoryModel
 from django_rubble.models.number_models import NaturalKeyModel
 from django_rubble.utils.strings import Alphabet, truncate_string, uuid_ish
+
+logger = logging.getLogger(__name__)
 
 
 # Create your models here.
@@ -60,6 +64,16 @@ class Container(HistoryModel, NaturalKeyModel):
     )
     natural_key_fields = ["label"]
 
+    @property
+    def primary_image(self):
+        attachment = self.attachments.filter(type="image").first()
+        logger.info(f"primary_image: {attachment}")  # noqa: G004
+        return (
+            self.attachments.through.objects.filter(attachment__type="image")
+            .first()
+            .attachment_image
+        )
+
     def __str__(self):
         return (
             f"{self.label} | {truncate_string(self.container_description, num_char=20)}"
@@ -75,28 +89,20 @@ class ContainerAttachment(models.Model):
     )
     description = models.TextField(blank=True)
     natural_key_fields = ["container", "attachment"]
-    rank = models.PositiveIntegerField(default=0, editable=False)
+    rank = models.PositiveIntegerField(default=0, db_index=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=["container", "attachment"], name="unique_container_attachment"
             ),
-            models.UniqueConstraint(
-                fields=["container", "rank"], name="unique_container_rank"
-            ),
         ]
         verbose_name = "Container Attachment"
         verbose_name_plural = "Container Attachments"
-        ordering = ["container", "attachment"]
+        ordering = ["rank", "container", "attachment"]
 
     def __str__(self):
         return f"{self.container} - {self.attachment}"
-
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            self.rank = self.container.attachments.count()
-        super().save(*args, **kwargs)
 
     @property
     def attachment_image(self):

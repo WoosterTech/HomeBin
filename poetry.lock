@@ -667,6 +667,20 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-admin-sortable2"
+version = "2.2.3"
+description = "Generic drag-and-drop sorting for the List, the Stacked- and the Tabular-Inlines Views in the Django Admin"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django_admin_sortable2-2.2.3-py3-none-any.whl", hash = "sha256:bda5f8f73590f7696595a86fc23c145d7c96b68fbb43478c74376484ee12ce81"},
+    {file = "django_admin_sortable2-2.2.3.tar.gz", hash = "sha256:38f95a956b5c23df2a46449f0a3268d47408a641cfb45961cde0c41d2a686397"},
+]
+
+[package.dependencies]
+Django = ">=4.2"
+
+[[package]]
 name = "django-admin-thumbnails"
 version = "0.2.9"
 description = "A Django app for DRY thumbnails in admin list views and forms."
@@ -858,6 +872,20 @@ files = [
 
 [package.dependencies]
 Django = ">=3.2"
+
+[[package]]
+name = "django-jazzmin"
+version = "3.0.1"
+description = "Drop-in theme for django admin, that utilises AdminLTE 3 & Bootstrap 4 to make yo' admin look jazzy"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django_jazzmin-3.0.1-py3-none-any.whl", hash = "sha256:12a0a4c1d4fd09c2eef22acf6a1f03112b515ba695c59faa8ea80efc81c1f21b"},
+    {file = "django_jazzmin-3.0.1.tar.gz", hash = "sha256:67ae148bade41267a09ca8e4352ddefa6121795ebbac238bb9a6564ff841eb1b"},
+]
+
+[package.dependencies]
+django = ">=4.2"
 
 [[package]]
 name = "django-model-utils"
@@ -3705,4 +3733,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7138d11a9458a834c9f414d2ddcb2ad61857d6e0eb2529bae11be0c70a4a11d2"
+content-hash = "5660fb0a128fcda1528266c7f08c280e0a927380554fbf487caff37f06b15a75"

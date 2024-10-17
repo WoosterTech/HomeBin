@@ -1,3 +1,9 @@
+## 0.2.0a2 (2024-10-17)
+
+### Feat
+
+- **admin_thumbnails**: include thumbnails in admin interface for attachments
+
 ## 0.2.0a1 (2024-10-17)
 
 ### Fix

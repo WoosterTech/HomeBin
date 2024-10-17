@@ -4,6 +4,7 @@
 from pathlib import Path
 
 import environ
+from django_rubble.secrets import Secrets
 from loguru import logger
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -22,6 +23,9 @@ if READ_DOT_ENV_FILE:
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
 logger.info(f"DEBUG? {DEBUG}")
+
+secrets = Secrets()
+
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.

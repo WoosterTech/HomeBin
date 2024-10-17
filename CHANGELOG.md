@@ -1,3 +1,9 @@
+## 0.2.0a3 (2024-10-17)
+
+### Feat
+
+- **sorting**: allow for "primary" images on containers by using sorting on the attachments in admin
+
 ## 0.2.0a2 (2024-10-17)
 
 ### Feat

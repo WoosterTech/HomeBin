@@ -331,5 +331,28 @@ SPECTACULAR_SETTINGS = {
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SCHEMA_PATH_PREFIX": "/api/",
 }
+
+# jazzmin
+# ------------------------------------------------------------------------------
+JAZZMIN_SETTINGS = {
+    "site_title": "HomeBin Admin",
+    "site_header": "Wooster HomeBin",
+    "site_brand": "Wooster HomeBin",
+    "welcome_sign": "Welcome to the Wooster's HomeBin Admin",
+    "copyright": "Wooster Technical Solutions",
+    "search_model": "auth.User",
+    "user_avatar": None,
+    # "related_modal_active": True,
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"app": "locations"},
+        {"app": "assets"},
+    ],
+    "show_ui_builder": True,
+    # "hide_apps": ["account", "authtoken", "mfa", "sites", "socialaccount"],
+    "order_with_respect_to": ["locations", "locations.Container", "locations.Location"],
+}
+
+
 # Your stuff...
 # ------------------------------------------------------------------------------

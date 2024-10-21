@@ -1,1 +1,10 @@
 {% extends "base.html" %}
+
+{% block content %}
+  <c-card title="Admin" :views='[{"url":"admin:index", "name":"Index"}, {"url":"admin:assets_asset_changelist", "name":"Assets"}]'>
+  We have the best trees
+  </c-card>
+  <c-card title="Locations" :views='[{"url":"locations:container_list", "name":"Containers"}]'>
+  We have the best trees
+  </c-card>
+{% endblock content %}

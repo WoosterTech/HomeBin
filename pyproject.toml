@@ -95,6 +95,8 @@ django-cotton = "^1.2.1"
 django-admin-thumbnails = "^0.2.9"
 django-jazzmin = "^3.0.1"
 django-admin-sortable2 = "^2.2.3"
+django-tables2 = "^2.7.0"
+easy-thumbnails = "^2.10"
 
 
 [tool.poetry.group.dev]

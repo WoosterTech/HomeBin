@@ -1028,6 +1028,23 @@ django = "*"
 typing-extensions = "*"
 
 [[package]]
+name = "django-tables2"
+version = "2.7.0"
+description = "Table/data-grid framework for Django"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-tables2-2.7.0.tar.gz", hash = "sha256:4113fcc575eb438a12e83a4d4ea01452e4800d970e8bdd0e4122ac171af1900d"},
+    {file = "django_tables2-2.7.0-py2.py3-none-any.whl", hash = "sha256:99e06d966ca8ac69fd74092eb45c79a280dd5ca0ccb81395d96261f62128e1af"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[package.extras]
+tablib = ["tablib"]
+
+[[package]]
 name = "djangorestframework"
 version = "3.15.2"
 description = "Web APIs for Django, made easy."
@@ -1121,6 +1138,24 @@ uritemplate = ">=2.0.0"
 [package.extras]
 offline = ["drf-spectacular-sidecar"]
 sidecar = ["drf-spectacular-sidecar"]
+
+[[package]]
+name = "easy-thumbnails"
+version = "2.10"
+description = "Easy thumbnails for Django"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "easy_thumbnails-2.10-py3-none-any.whl", hash = "sha256:9e446fb9da1ca0cbc99bdd1fe8fdd5c38784323d64393a37e16d13cd736980b2"},
+    {file = "easy_thumbnails-2.10.tar.gz", hash = "sha256:d009462fcd791edf2496e5ed46d044712e1a06b7d4600e4cf2812002e9904ef5"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+pillow = "*"
+
+[package.extras]
+svg = ["reportlab", "svglib"]
 
 [[package]]
 name = "editorconfig"
@@ -3733,4 +3768,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5660fb0a128fcda1528266c7f08c280e0a927380554fbf487caff37f06b15a75"
+content-hash = "ace3d02b41a9c9e8770d376155ee2a64a21f2a436e3276ac2137465cf0595286"

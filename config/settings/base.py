@@ -94,6 +94,8 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "django_cotton",
     "django_rubble",
+    "django_tables2",
+    "easy_thumbnails",
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
@@ -351,6 +353,18 @@ JAZZMIN_SETTINGS = {
     "show_ui_builder": True,
     # "hide_apps": ["account", "authtoken", "mfa", "sites", "socialaccount"],
     "order_with_respect_to": ["locations", "locations.Container", "locations.Location"],
+}
+
+# easy-thumbnails
+# ------------------------------------------------------------------------------
+# https://easy-thumbnails.readthedocs.io/en/latest/ref/settings/
+THUMBNAIL_ALIASES = {
+    "": {
+        "avatar": {"size": (100, 100), "crop": "smart"},
+        "thumbnail": {"size": (200, 200), "crop": "smart"},
+        "medium": {"size": (300, 300), "crop": "smart"},
+        "large": {"size": (400, 400), "crop": "smart"},
+    },
 }
 
 

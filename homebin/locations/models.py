@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_rubble.models.history_models import HistoryModel
 from django_rubble.models.number_models import NaturalKeyModel
@@ -29,6 +30,10 @@ class Location(HistoryModel, NaturalKeyModel):
         ordering = ["name"]
         verbose_name = "Location"
         verbose_name_plural = "Locations"
+
+    def get_absolute_url(self):
+        logger.debug("get_absolute_url: %s", self.pk)
+        return reverse("locations:location_detail", args=[self.pk])
 
 
 def default_container_label():
@@ -75,3 +80,6 @@ class Container(HistoryModel, NaturalKeyModel):
         return (
             f"{self.label} | {truncate_string(self.container_description, num_char=20)}"
         )
+
+    def get_absolute_url(self):
+        return reverse("locations:container_detail", args=[self.label])

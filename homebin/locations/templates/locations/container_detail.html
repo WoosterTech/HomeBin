@@ -1,0 +1,24 @@
+{% extends "base_detail.html" %}
+
+{% load thumbnail %}
+
+{% block content %}
+  <h2>{{ object.label }}</h2>
+  <div class="btn-group">
+    <a class="btn btn-secondary" href="{% url "locations:container_list" %}">List</a>
+    <a class="btn btn-secondary"
+       href="{% url "admin:locations_container_change" object.id %}">Admin</a>
+  </div>
+  <div>
+    <img src="{{ object.primary_image|thumbnail_url:'medium' }}"
+         alt="primary image" />
+    <ul>
+      <li>
+        <span>Contents:</span> {{ object.simple_contents }}
+      </li>
+      <li>
+        <span>Location:</span> {{ object.location }}
+      </li>
+    </ul>
+  </div>
+{% endblock content %}

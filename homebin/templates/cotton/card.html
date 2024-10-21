@@ -1,0 +1,9 @@
+<div class="card">
+  <div class="card-header">{{ title }}</div>
+  <div class="list-group list-group-flush">
+    {% for view in views %}
+      <a href="{% url view.url %}"
+         class="list-group-item list-group-item-action">{{ view.name|title }}</a>
+    {% endfor %}
+  </div>
+</div>

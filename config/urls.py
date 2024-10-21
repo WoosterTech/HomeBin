@@ -23,7 +23,7 @@ urlpatterns = [
     path("users/", include("homebin.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-    # ...
+    path("locations/", include("homebin.locations.urls", namespace="locations")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

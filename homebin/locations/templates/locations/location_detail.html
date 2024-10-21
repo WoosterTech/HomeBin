@@ -1,0 +1,9 @@
+{% extends "base_detail.html" %}
+
+{% block actions %}
+  <div class="btn-group">
+    <a class="btn btn-secondary" href="{% url "locations:location_list" %}">List</a>
+    <a class="btn btn-secondary"
+       href="{% url "admin:locations_location_change" object.pk %}">Admin</a>
+  </div>
+{% endblock actions %}

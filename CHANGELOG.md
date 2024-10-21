@@ -1,3 +1,14 @@
+## 0.2.0a5 (2024-10-21)
+
+### Feat
+
+- **views**: add views/tables/thumbnails
+
+### Fix
+
+- **migrations**: add in empty migrations to fill some mistakes I made
+- **migrations**: un-delete attachment migrations
+
 ## 0.2.0a4 (2024-10-21)
 
 ### Feat

@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_rubble.models.history_models import HistoryModel
@@ -58,55 +59,19 @@ class Container(HistoryModel, NaturalKeyModel):
         null=True,
         blank=True,
     )
-    attachments = models.ManyToManyField(
-        "attachments.Attachment",
-        through="ContainerAttachment",
-    )
     natural_key_fields = ["label"]
+
+    attachments_generic = GenericRelation(
+        "attachments.GenericAttachment", related_query_name="containers"
+    )
 
     @property
     def primary_image(self):
-        attachment = self.attachments.filter(type="image").first()
-        logger.info(f"primary_image: {attachment}")  # noqa: G004
-        return (
-            self.attachments.through.objects.filter(attachment__type="image")
-            .first()
-            .attachment_image
-        )
+        attachment = self.attachments_generic.filter(attachment_type="image").first()
+        logger.info("%s primary_image: %s", str(self), attachment)
+        return attachment.file
 
     def __str__(self):
         return (
             f"{self.label} | {truncate_string(self.container_description, num_char=20)}"
         )
-
-
-class ContainerAttachment(models.Model):
-    container = models.ForeignKey(
-        Container, on_delete=models.CASCADE, related_name="container_attachments"
-    )
-    attachment = models.ForeignKey(
-        "attachments.Attachment", on_delete=models.CASCADE, related_name="containers"
-    )
-    description = models.TextField(blank=True)
-    natural_key_fields = ["container", "attachment"]
-    rank = models.PositiveIntegerField(default=0, db_index=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["container", "attachment"], name="unique_container_attachment"
-            ),
-        ]
-        verbose_name = "Container Attachment"
-        verbose_name_plural = "Container Attachments"
-        ordering = ["rank", "container", "attachment"]
-
-    def __str__(self):
-        return f"{self.container} - {self.attachment}"
-
-    @property
-    def attachment_image(self):
-        attachment = self.attachment
-        if attachment.type == "image":
-            return attachment.attachment
-        return None

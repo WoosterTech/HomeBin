@@ -1,17 +1,14 @@
 import admin_thumbnails
-from adminsortable2.admin import SortableAdminBase, SortableTabularInline
+from adminsortable2.admin import (
+    SortableAdminBase,
+)
 from django.contrib import admin
 
+from homebin.attachments.admin import GenericAttachmentInline
 from homebin.locations.models import Container, Location
 
 # Register your models here.
 admin.site.register(Location)
-
-
-@admin_thumbnails.thumbnail("attachment_image")
-class ContainerAttachmentInline(SortableTabularInline):
-    model = Container.attachments.through
-    extra = 1
 
 
 @admin.register(Container)
@@ -25,4 +22,4 @@ class ContainerAdmin(SortableAdminBase, admin.ModelAdmin):
         "location",
     ]
     search_fields = ["label", "container_description", "simple_contents"]
-    inlines = [ContainerAttachmentInline]
+    inlines = [GenericAttachmentInline]

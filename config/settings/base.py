@@ -80,7 +80,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    "jazzmin",  # must be before django.contrib.admin
+    # "jazzmin",  # must be before django.contrib.admin
     "django.contrib.admin",
     "django.forms",
 ]

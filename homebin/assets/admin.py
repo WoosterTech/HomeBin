@@ -1,18 +1,16 @@
+import admin_thumbnails
+from adminsortable2.admin import SortableAdminBase
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericTabularInline
 
 from homebin.assets.models import Asset, Manufacturer
-from homebin.attachments.models import GenericAttachment
+from homebin.attachments.admin import GenericAttachmentInline
 
 # Register your models here.
 admin.site.register(Manufacturer)
 
 
-class GenericAttachmentInline(GenericTabularInline):
-    model = GenericAttachment
-    extra = 0
-
-
 @admin.register(Asset)
-class AssetAdmin(admin.ModelAdmin):
+@admin_thumbnails.thumbnail("primary_image")
+class AssetAdmin(SortableAdminBase, admin.ModelAdmin):
+    list_display = ["name", "make", "model", "primary_image_thumbnail"]
     inlines = [GenericAttachmentInline]

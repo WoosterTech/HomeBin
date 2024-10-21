@@ -1,9 +1,13 @@
+import logging
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django_rubble.models.history_models import HistoryModel
 from django_rubble.models.number_models import NaturalKeyModel
 
 from homebin.attachments.models import GenericAttachment
+
+logger = logging.getLogger(__name__)
 
 
 # Create your models here.
@@ -32,6 +36,12 @@ class Asset(HistoryModel, NaturalKeyModel):
     notes = models.TextField(blank=True)
     natural_key_fields = ["name", "serial_number"]
     attachments = GenericRelation(GenericAttachment, related_query_name="asset")
+
+    @property
+    def primary_image(self):
+        attachment = self.attachments.filter(attachment_type="image").first()
+        logger.info("%s primary_image: %s", str(self), attachment)
+        return attachment.file
 
     def __str__(self):
         return self.name

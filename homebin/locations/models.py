@@ -74,7 +74,7 @@ class Container(HistoryModel, NaturalKeyModel):
     def primary_image(self):
         attachment = self.attachments_generic.filter(attachment_type="image").first()
         logger.info("%s primary_image: %s", str(self), attachment)
-        return attachment.file
+        return attachment.file if attachment is not None else None
 
     def __str__(self):
         return (

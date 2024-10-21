@@ -1,3 +1,10 @@
+## 0.2.0a4 (2024-10-21)
+
+### Feat
+
+- **attachments**: move attachments to generic attachments; improve primary_image in containers and assets
+- **assets**: add assets and jazzmin
+
 ## 0.2.0a3 (2024-10-17)
 
 ### Feat

@@ -43,4 +43,4 @@ class Migration(migrations.Migration):
         ("attachments", "0006_alter_attachment_type_and_more"),
     ]
 
-    operations = [migrations.RunPython(move_attachments, migrations.RunPython.noop),]
+    operations = []

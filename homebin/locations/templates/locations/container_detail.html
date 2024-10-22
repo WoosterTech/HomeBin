@@ -10,8 +10,10 @@
        href="{% url "admin:locations_container_change" object.id %}">Admin</a>
   </div>
   <div>
-    <img src="{{ object.primary_image|thumbnail_url:'medium' }}"
-         alt="primary image" />
+    {% if object.primary_image %}
+      <img src="{{ object.primary_image|thumbnail_url:'medium' }}"
+           alt="primary image" />
+    {% endif %}
     <ul>
       <li>
         <span>Contents:</span> {{ object.simple_contents }}

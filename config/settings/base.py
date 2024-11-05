@@ -378,7 +378,7 @@ THUMBNAIL_ALIASES = {
 # ------------------------------------------------------------------------------
 # https://docs.iommi.rocks/en/stable/
 def IOMMI_DEBUG_URL_BUILDER(filename, lineno):  # noqa: N802
-    return f"vscode://file/{filename}: {"" if lineno is None else lineno}"
+    return f"vscode://file/{filename}: {'' if lineno is None else lineno}"
 
 
 # Your stuff...

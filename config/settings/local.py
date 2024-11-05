@@ -65,3 +65,12 @@ INSTALLED_APPS += ["django_extensions"]
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+
+from iommi import Style  # noqa: E402
+from iommi.style_bootstrap5 import bootstrap5  # noqa: E402
+
+IOMMI_DEFAULT_STYLE = Style(
+    bootstrap5,
+    base_template="iommi_base.html",
+)

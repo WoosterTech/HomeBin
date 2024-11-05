@@ -33,7 +33,7 @@ class Location(HistoryModel, NaturalKeyModel):
 
     def get_absolute_url(self):
         logger.debug("get_absolute_url: %s", self.pk)
-        return reverse("locations:location_detail", args=[self.pk])
+        return reverse("location-detail", args=[self.pk])
 
 
 def default_container_label():
@@ -82,4 +82,4 @@ class Container(HistoryModel, NaturalKeyModel):
         )
 
     def get_absolute_url(self):
-        return reverse("locations:container_detail", args=[self.label])
+        return reverse("container-detail", args=[self.label])

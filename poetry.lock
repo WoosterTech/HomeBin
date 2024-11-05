@@ -921,7 +921,7 @@ hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-rubble"
-version = "0.7.0b5"
+version = "0.7.0b6"
 description = "Extend django-model-utils and django-extensions."
 optional = false
 python-versions = "^3.10"
@@ -935,7 +935,7 @@ django-model-utils = ">=4.5.1"
 infisical-python = {version = "^2.3.5", optional = true}
 loguru = ">=0.7.2"
 pydantic = ">=2.6.4"
-rich = "^13.9.2"
+rich = ">=13.7.0"
 
 [package.extras]
 all = ["django-simple-history (>=3.7.0)", "infisical-python (>=2.3.5,<3.0.0)", "neapolitan (>=24.6)", "typer (>=0.12.5,<0.13.0)"]
@@ -948,7 +948,7 @@ secrets = ["infisical-python (>=2.3.5,<3.0.0)"]
 type = "git"
 url = "https://github.com/WoosterTech/django-rubble.git"
 reference = "HEAD"
-resolved_reference = "95f11ee110c2c506d52166642a89e39786231873"
+resolved_reference = "469b2dae27f10eab9edaf0b2e4e373e65449324b"
 
 [[package]]
 name = "django-simple-history"
@@ -1511,6 +1511,21 @@ files = [
     {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
     {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
 ]
+
+[[package]]
+name = "iommi"
+version = "7.7.0"
+description = "iommi is a high level framework built on django"
+optional = false
+python-versions = "*"
+files = [
+    {file = "iommi-7.7.0-py2.py3-none-any.whl", hash = "sha256:81402d95aea23f064ecbd89290a2df65df79789e8753fe35a792d7193f8ed4f3"},
+    {file = "iommi-7.7.0.tar.gz", hash = "sha256:4badc5d26b04f1452aef76377ab34183018f5f80af93dc47353a7483a147fadf"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+pyparsing = "*"
 
 [[package]]
 name = "ipdb"
@@ -2363,6 +2378,20 @@ files = [
 
 [package.extras]
 windows-terminal = ["colorama (>=0.4.6)"]
+
+[[package]]
+name = "pyparsing"
+version = "3.2.0"
+description = "pyparsing module - Classes and methods to define and execute parsing grammars"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "pyparsing-3.2.0-py3-none-any.whl", hash = "sha256:93d9577b88da0bbea8cc8334ee8b918ed014968fd2ec383e868fb8afb1ccef84"},
+    {file = "pyparsing-3.2.0.tar.gz", hash = "sha256:cbf74e27246d595d9a74b186b810f6fbb86726dbf3b9532efb343f6d7294fe9c"},
+]
+
+[package.extras]
+diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pytest"
@@ -3768,4 +3797,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ace3d02b41a9c9e8770d376155ee2a64a21f2a436e3276ac2137465cf0595286"
+content-hash = "5cbc26eb69f31f29c69b8839f731192049c847c3fdef311726a703b7c965065c"

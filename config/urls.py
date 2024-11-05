@@ -8,10 +8,31 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
+
+# from iommi import Form
+from iommi import Form
 from rest_framework.authtoken.views import obtain_auth_token
 
+from homebin.assets.models import Asset
+from homebin.assets.tables import AssetTable
+from homebin.assets.views import (
+    AssetDetailPage,
+    AssetListPage,
+    ManufacturerDetailPage,
+    ManufacturerListPage,
+)
+from homebin.helpers.views import IndexPage
+from homebin.locations.models import Container, Location
+from homebin.locations.views import (
+    ContainerDetailPage,
+    ContainerListPage,
+    LocationDetailPage,
+    LocationListPage,
+)
+
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("", IndexPage().as_view(), name="home"),
     path(
         "about/",
         TemplateView.as_view(template_name="pages/about.html"),
@@ -23,7 +44,40 @@ urlpatterns = [
     path("users/", include("homebin.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-    path("locations/", include("homebin.locations.urls", namespace="locations")),
+    # path("locations/", include("homebin.locations.urls", namespace="locations")),
+    path("containers/", ContainerListPage().as_view(), name="container-list"),
+    path(
+        "containers/create/",
+        Form.create(auto__model=Container).as_view(),
+        name="container-create",
+    ),
+    path(
+        "containers/<container_label>/",
+        ContainerDetailPage().as_view(),
+        name="container-detail",
+    ),
+    path("locations/", LocationListPage().as_view(), name="location-list"),
+    path(
+        "locations/create/",
+        Form.create(auto__model=Location).as_view(),
+        name="location-create",
+    ),
+    path(
+        "locations/<location_pk>/",
+        LocationDetailPage().as_view(),
+        name="location-detail",
+    ),
+    path("assets/", AssetListPage().as_view(), name="asset-list"),
+    path(
+        "assets/create/", Form.create(auto__model=Asset).as_view(), name="asset-create"
+    ),
+    path("assets/<asset_pk>/", AssetDetailPage().as_view(), name="asset-detail"),
+    path("manufacturers/", ManufacturerListPage().as_view(), name="manufacturer-list"),
+    path(
+        "manufacturers/<manufacturer_slug>/",
+        ManufacturerDetailPage().as_view(),
+        name="manufacturer-detail",
+    ),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

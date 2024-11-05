@@ -2,24 +2,30 @@ import logging
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from django.urls import reverse
+from django_extensions.db.fields import AutoSlugField
 from django_rubble.models.history_models import HistoryModel
-from django_rubble.models.number_models import NaturalKeyModel
 
 from homebin.attachments.models import GenericAttachment
+from homebin.helpers.models import ItemBaseModel
 
 logger = logging.getLogger(__name__)
 
 
 # Create your models here.
-class Manufacturer(NaturalKeyModel):
-    name = models.CharField(max_length=100)
+class Manufacturer(ItemBaseModel):
+    name = models.CharField(max_length=100, unique=True)
     natural_key_fields = ["name"]
+    slug = AutoSlugField(populate_from="name")
 
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("manufacturer-detail", kwargs={"manufacturer_slug": self.slug})
 
-class Asset(HistoryModel, NaturalKeyModel):
+
+class Asset(ItemBaseModel, HistoryModel):
     name = models.CharField(max_length=100)
     make = models.ForeignKey(Manufacturer, on_delete=models.CASCADE, default=1)
     model = models.CharField(max_length=100, blank=True)
@@ -45,3 +51,6 @@ class Asset(HistoryModel, NaturalKeyModel):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("asset-detail", kwargs={"asset_pk": self.pk})

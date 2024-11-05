@@ -7,7 +7,6 @@ from homebin.locations.views import (
     location_detail,
 )
 
-app_name = "locations"
 urlpatterns = [
     path("container/<str:label>/", container_detail, name="container_detail"),
     path("container/", ContainerListView.as_view(), name="container_list"),

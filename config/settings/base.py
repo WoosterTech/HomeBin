@@ -100,6 +100,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    "iommi",
 ]
 
 LOCAL_APPS = [
@@ -107,6 +108,7 @@ LOCAL_APPS = [
     "homebin.attachments",
     "homebin.locations",
     "homebin.users",
+    "homebin.helpers",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -154,6 +156,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
+    "iommi.live_edit.Middleware",
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -164,7 +167,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "iommi.sql_trace.Middleware",
+    "iommi.profiling.Middleware",
     "allauth.account.middleware.AccountMiddleware",
+    "iommi.middleware",
 ]
 
 # STATIC
@@ -366,6 +372,13 @@ THUMBNAIL_ALIASES = {
         "large": {"size": (400, 400), "crop": "smart"},
     },
 }
+
+
+# iommi
+# ------------------------------------------------------------------------------
+# https://docs.iommi.rocks/en/stable/
+def IOMMI_DEBUG_URL_BUILDER(filename, lineno):  # noqa: N802
+    return f"vscode://file/{filename}: {"" if lineno is None else lineno}"
 
 
 # Your stuff...

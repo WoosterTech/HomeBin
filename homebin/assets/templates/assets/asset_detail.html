@@ -1,0 +1,23 @@
+{% extends "base_detail.html" %}
+
+{% load thumbnail %}
+
+{% block content %}
+  <h2>{{ object.label }}</h2>
+  <div class="btn-group">
+    {% comment %} <a class="btn btn-secondary" href="{% url "assets-list" %}">List</a> {% endcomment %}
+    <a class="btn btn-secondary"
+       href="{% url "admin:assets_asset_change" object.id %}">Admin</a>
+  </div>
+  <div>
+    {% if object.primary_image %}
+      <img src="{{ object.primary_image|thumbnail_url:'medium' }}"
+           alt="primary image" />
+    {% endif %}
+    <ul>
+      <li>
+        <span>Name:</span> {{ object.name }}
+      </li>
+    </ul>
+  </div>
+{% endblock content %}

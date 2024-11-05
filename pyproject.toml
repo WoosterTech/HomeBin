@@ -98,6 +98,7 @@ django-admin-sortable2 = "^2.2.3"
 django-tables2 = "^2.7.0"
 easy-thumbnails = "^2.10"
 iommi = "^7.7.0"
+django-extensions = "^3.2.3"
 
 
 [tool.poetry.group.dev]
@@ -120,7 +121,6 @@ pre-commit = "^4.0.1"
 # Django
 # -----------------------------------------------------------
 django-debug-toolbar = "^4.4.6"
-django-extensions = "^3.2.3"
 psycopg = {extras = ["binary"], version = "^3.2.3"}
 
 

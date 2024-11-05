@@ -20,8 +20,8 @@ class AssetListPage(BasePage):
             attrs__class={"btn": True, "btn-primary": True},
         ),
         html.a(
-            "Edit (Admin)",
-            attrs__href=lambda asset, **_: reverse("admin:assets_asset_change", args=[asset.pk]),
+            "Admin",
+            attrs__href=lambda **_: reverse("admin:assets_asset_changelist"),
             attrs__class={"btn": True, "btn-secondary": True},
         ),
         attrs__class={"btn-group": True},
@@ -38,8 +38,8 @@ class AssetDetailPage(BasePage):
             attrs__class={"btn": True, "btn-primary": True},
         ),
         html.a(
-            "Admin",
-            attrs__href=lambda **_: reverse("admin:assets_asset_changelist"),
+            "Edit (Admin)",
+            attrs__href=lambda **_: reverse("admin:assets_asset_change", args=[asset.pk]),
             attrs__class={"btn": True, "btn-secondary": True},
         ),
         attrs__class={"btn-group": True},

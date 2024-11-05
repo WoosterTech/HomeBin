@@ -1,3 +1,14 @@
+## 0.2.0a6 (2024-11-04)
+
+### Feat
+
+- **iommi**: integrate iommi in several locations
+
+### Fix
+
+- **primary_image**: add if statement to template to not show preview if none is available
+- **primary_image**: handle if no attachment
+
 ## 0.2.0a5 (2024-10-21)
 
 ### Feat

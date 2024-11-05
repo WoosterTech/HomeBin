@@ -1,5 +1,3 @@
-from typing import override
-
 from django.urls import reverse
 from django_rubble.models.number_models import NaturalKeyModel
 
@@ -17,7 +15,6 @@ class ItemBaseModel(NaturalKeyModel):
     class Meta:
         abstract = True
 
-    @override
     def get_absolute_url(self):
         lookup_kwarg = {self.lookup_field: getattr(self, self.lookup_field)}
         return reverse(f"{self.model_name()}-detail", kwargs=lookup_kwarg)

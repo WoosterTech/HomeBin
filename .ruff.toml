@@ -1,4 +1,4 @@
-target-version = "py312"
+target-version = "py311"
 # Exclude a variety of commonly ignored directories.
 extend-exclude = [
     "*/migrations/*.py",

@@ -95,6 +95,7 @@ THIRD_PARTY_APPS = [
     "django_cotton",
     "django_rubble",
     "django_tables2",
+    "django_extensions",
     "easy_thumbnails",
     "rest_framework",
     "rest_framework.authtoken",

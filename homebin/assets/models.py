@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 from django_rubble.models.history_models import HistoryModel
+from easy_thumbnails.files import get_thumbnailer
 
 from homebin.attachments.models import GenericAttachment
 from homebin.helpers.models import ItemBaseModel
@@ -48,6 +49,13 @@ class Asset(ItemBaseModel, HistoryModel):
         attachment = self.attachments.filter(attachment_type="image").first()
         logger.info("%s primary_image: %s", str(self), attachment)
         return attachment.file if attachment is not None else None
+
+    @property
+    def primary_thumbnail(self):
+        primary_image = self.primary_image
+        if primary_image is not None:
+            return get_thumbnailer(primary_image)
+        return None
 
     def __str__(self):
         return self.name

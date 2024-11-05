@@ -5,8 +5,19 @@ from django.contrib import admin
 from homebin.assets.models import Asset, Manufacturer
 from homebin.attachments.admin import GenericAttachmentInline
 
+
 # Register your models here.
-admin.site.register(Manufacturer)
+# @admin_thumbnails.thumbnail("primary_image")
+class AssetInline(admin.TabularInline):
+    model = Asset
+    extra = 0
+    fields = ["name", "model"]
+
+
+@admin.register(Manufacturer)
+class ManufacturerAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    inlines = [AssetInline]
 
 
 @admin.register(Asset)

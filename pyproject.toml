@@ -107,7 +107,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^4.0.2"
-werkzeug = { version = "^3.0.4", extras = ["watchdog"] }
+werkzeug = { version = "^3.1.2", extras = ["watchdog"] }
 ipdb = "^0.13.13"
 # psycopg = {extras = ["binary"], version = "^3.2.3", platform = "win32"}
 # Code Quality

@@ -1,6 +1,5 @@
 # Create your views here.
 from django.urls import reverse
-from easy_thumbnails.files import get_thumbnailer
 from iommi import Field, Form, Page, html
 from iommi.path import register_path_decoding
 

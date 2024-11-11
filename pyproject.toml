@@ -67,7 +67,7 @@ gunicorn = { version = "^23.0.0", platform = "linux" }
 # base
 # -----------------------------------------------------------
 django-environ = "^0.11.2"
-django-model-utils = "^4.5.1"
+django-model-utils = "^5.0.0"
 django-allauth = { version = "^65.2.0", extras = ["mfa"] }
 django-crispy-forms = "^2.3"
 crispy-bootstrap5 = "^2024.10"
@@ -106,8 +106,8 @@ optional = true
 
 
 [tool.poetry.group.dev.dependencies]
-watchdog = "^4.0.2"
-werkzeug = { version = "^3.0.4", extras = ["watchdog"] }
+watchdog = "^6.0.0"
+werkzeug = {version = "^3.1.3", extras = ["watchdog"]}
 ipdb = "^0.13.13"
 # psycopg = {extras = ["binary"], version = "^3.2.3", platform = "win32"}
 # Code Quality

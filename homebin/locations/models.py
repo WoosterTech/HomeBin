@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django_rubble.models.history_models import HistoryModel
 from django_rubble.models.number_models import NaturalKeyModel
 from django_rubble.utils.strings import Alphabet, truncate_string, uuid_ish
+from easy_thumbnails.files import get_thumbnailer
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +76,13 @@ class Container(HistoryModel, NaturalKeyModel):
         attachment = self.attachments_generic.filter(attachment_type="image").first()
         logger.info("%s primary_image: %s", str(self), attachment)
         return attachment.file if attachment is not None else None
+
+    @property
+    def primary_thumbnail(self):
+        primary_image = self.primary_image
+        if primary_image is not None:
+            return get_thumbnailer(primary_image)
+        return None
 
     def __str__(self):
         return (

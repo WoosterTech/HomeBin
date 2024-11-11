@@ -13,6 +13,7 @@ from drf_spectacular.views import SpectacularSwaggerView
 from iommi import Form
 from rest_framework.authtoken.views import obtain_auth_token
 
+from homebin.assets.admin import MyAdmin
 from homebin.assets.models import Asset
 from homebin.assets.tables import AssetTable
 from homebin.assets.views import (
@@ -80,6 +81,7 @@ urlpatterns = [
         name="manufacturer-detail",
     ),
     path("attachments/<attachment_pk>/edit/", AssetAttachmentForm().as_view()),
+    path("iommi-admin/", include(MyAdmin.urls())),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

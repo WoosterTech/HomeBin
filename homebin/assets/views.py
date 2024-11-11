@@ -32,6 +32,17 @@ class AssetListPage(BasePage):
     assets_table = AssetTable()
 
 
+def primary_thumbnail_or_none(asset: Asset | None, **_):
+    if asset is None:
+        return None
+    return html.div(
+        html.img(
+            attrs__src=asset.primary_thumbnail["medium"].url,
+            attrs__alt=asset.name,
+        )
+    )
+
+
 class AssetDetailPage(BasePage):
     title = html.h1(lambda asset, **_: asset.name)
     actions = html.div(
@@ -41,19 +52,20 @@ class AssetDetailPage(BasePage):
             attrs__class={"btn": True, "btn-primary": True},
         ),
         html.a(
-            "Admin",
-            attrs__href=lambda **_: reverse("admin:assets_asset_changelist"),
+            "Edit (Admin)",
+            attrs__href=lambda asset, **_: reverse(
+                "admin:assets_asset_change", args=[asset.pk]
+            ),
             attrs__class={"btn": True, "btn-secondary": True},
         ),
         attrs__class={"btn-group": True},
     )
+    # TODO: use a lambda that returns a Fragment?
     primary_image = html.div(
         html.img(
-            attrs__src=lambda asset, **_: get_thumbnailer(asset.primary_image)[
-                "medium"
-            ].url,
+            attrs__src=lambda asset, **_: asset.primary_thumbnail["medium"].url,
             attrs__alt=lambda asset, **_: asset.name,
-        ),
+        )
     )
     asset = html.div(
         html.ul(
@@ -92,7 +104,7 @@ class ManufacturerListPage(BasePage):
     title = html.h1("Manufacturer List")
     actions = html.div(
         html.a(
-            "New",
+            "New (Admin)",
             attrs__href=lambda **_: reverse("admin:assets_manufacturer_add"),
             attrs__class={"btn": True, "btn-primary": True},
         ),
@@ -103,6 +115,21 @@ class ManufacturerListPage(BasePage):
 
 class ManufacturerDetailPage(Page):
     title = html.h1(lambda manufacturer, **_: manufacturer.name)
+    actions = html.div(
+        html.a(
+            "List",
+            attrs__href=lambda **_: reverse("manufacturer-list"),
+            attrs__class={"btn": True, "btn-primary": True},
+        ),
+        html.a(
+            "Edit (Admin)",
+            attrs__href=lambda manufacturer, **_: reverse(
+                "admin:assets_manufacturer_change", args=[manufacturer.pk]
+            ),
+            attrs__class={"btn": True, "btn-secondary": True},
+        ),
+        attrs__class={"btn-group": True},
+    )
     table_title = html.h3("Related Assets")
     related_assets = AssetTable(
         rows=lambda manufacturer, **_: manufacturer.asset_set.all(),

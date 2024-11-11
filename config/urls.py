@@ -16,6 +16,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from homebin.assets.models import Asset
 from homebin.assets.tables import AssetTable
 from homebin.assets.views import (
+    AssetAttachmentForm,
     AssetDetailPage,
     AssetListPage,
     ManufacturerDetailPage,
@@ -78,6 +79,7 @@ urlpatterns = [
         ManufacturerDetailPage().as_view(),
         name="manufacturer-detail",
     ),
+    path("attachments/<attachment_pk>/edit/", AssetAttachmentForm().as_view()),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

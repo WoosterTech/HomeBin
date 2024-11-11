@@ -1,14 +1,17 @@
 # Create your views here.
 from django.urls import reverse
 from easy_thumbnails.files import get_thumbnailer
-from iommi import Page, html
+from iommi import Field, Form, Page, html
 from iommi.path import register_path_decoding
 
 from homebin.assets.models import Asset, Manufacturer
 from homebin.assets.tables import AssetTable, ManufacturerTable
+from homebin.attachments.models import GenericAttachment
 from homebin.helpers.views import BasePage, item_label_class, item_row, item_row_class
 
-register_path_decoding(manufacturer_slug=Manufacturer.slug, asset_pk=Asset)
+register_path_decoding(
+    manufacturer_slug=Manufacturer.slug, asset_pk=Asset, attachment_pk=GenericAttachment
+)
 
 
 class AssetListPage(BasePage):
@@ -71,6 +74,18 @@ class AssetDetailPage(BasePage):
             attrs__class={"list-group": True, "mt-3": True},
         )
     )
+
+
+class AssetAttachmentForm(Form):
+    file = Field.file()
+    attachment_type = Field.choice(
+        choices=GenericAttachment.TYPE_CHOICES, initial="image"
+    )
+
+    class Meta:
+        instance = lambda params, **_: GenericAttachment.objects.get(  # noqa: E731
+            pk=params.attachment_pk
+        )
 
 
 class ManufacturerListPage(BasePage):

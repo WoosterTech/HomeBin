@@ -1,4 +1,6 @@
 # Create your views here.
+import logging
+
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
@@ -15,6 +17,8 @@ from homebin.locations.tables import (
     LocationsTable,
     LocationTable,
 )
+
+logger = logging.getLogger(__name__)
 
 register_path_decoding(container_label=Container.label, location_pk=Location)
 
@@ -37,8 +41,28 @@ class LocationListPage(BasePage):
     locations_table = LocationsTable()
 
 
+def location_detail_actions(location, request, **_):
+    logger.debug("location_detail_actions %s", location)
+    attrs_class = {"btn": True, "btn-primary": True}
+    if location.parent_location:
+
+        def attrs_href(location, **_):
+            return location.parent_location.get_absolute_url()
+
+        return html.a(
+            lambda location, **_: f"Up to {location.parent_location}",
+            attrs__href=attrs_href,
+        ).bind(request=request)
+
+    return None
+
+
 class LocationDetailPage(BasePage):
+    breadcrumbs = html.div(
+        location_detail_actions,
+    )
     title = html.h1(lambda location, **_: location.name)
+
     actions = html.div(
         html.a(
             "List",
@@ -52,6 +76,12 @@ class LocationDetailPage(BasePage):
         ),
         attrs__class={"btn-group": True},
     )
+
+    sub_locations_table_title = html.h3("Sub Locations")
+    sub_locations = LocationsTable(
+        rows=lambda location, **_: location.location_set.all(),
+    )
+
     table_title = html.h3("Related Containers")
     related_containers = ContainersTable(
         rows=lambda location, **_: location.containers.all(),
@@ -106,7 +136,7 @@ class ContainerDetailPage(BasePage):
             item_row(
                 "Description", lambda container, **_: container.container_description
             ),
-            item_row("Serial Number", lambda container, **_: container.simple_contents),
+            item_row("Contents", lambda container, **_: container.simple_contents),
             html.li(
                 html.span("Location: ", attrs__class=item_label_class),
                 html.a(

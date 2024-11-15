@@ -1,4 +1,6 @@
 # Create your views here.
+import logging
+
 from django.urls import reverse
 from iommi import Field, Form, Page, html
 from iommi.path import register_path_decoding
@@ -7,6 +9,8 @@ from homebin.assets.models import Asset, Manufacturer
 from homebin.assets.tables import AssetTable, ManufacturerTable
 from homebin.attachments.models import GenericAttachment
 from homebin.helpers.views import BasePage, item_label_class, item_row, item_row_class
+
+logger = logging.getLogger(__name__)
 
 register_path_decoding(
     manufacturer_slug=Manufacturer.slug, asset_pk=Asset, attachment_pk=GenericAttachment
@@ -31,15 +35,14 @@ class AssetListPage(BasePage):
     assets_table = AssetTable()
 
 
-def primary_thumbnail_or_none(asset: Asset | None, **_):
-    if asset is None:
+def primary_thumbnail_or_none(request, asset: Asset | None, **_):
+    logger.info("hello?")
+    if asset.primary_thumbnail is None:
         return None
-    return html.div(
-        html.img(
-            attrs__src=asset.primary_thumbnail["medium"].url,
-            attrs__alt=asset.name,
-        )
-    )
+    return html.img(
+        attrs__src=lambda asset, **_: asset.primary_thumbnail["medium"].url,
+        attrs__alt=lambda asset, **_: asset.name,
+    ).bind(request=request)
 
 
 class AssetDetailPage(BasePage):
@@ -60,12 +63,7 @@ class AssetDetailPage(BasePage):
         attrs__class={"btn-group": True},
     )
     # TODO: use a lambda that returns a Fragment?
-    primary_image = html.div(
-        html.img(
-            attrs__src=lambda asset, **_: asset.primary_thumbnail["medium"].url,
-            attrs__alt=lambda asset, **_: asset.name,
-        )
-    )
+    primary_image = html.div(primary_thumbnail_or_none)
     asset = html.div(
         html.ul(
             html.li(

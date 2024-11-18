@@ -29,6 +29,7 @@ from homebin.locations.views import (
     ContainerListPage,
     LocationDetailPage,
     LocationListPage,
+    breadcrumb_test,
 )
 
 urlpatterns = [
@@ -80,6 +81,7 @@ urlpatterns = [
         name="manufacturer-detail",
     ),
     path("iommi-admin/", include(MyAdmin.urls())),
+    path("locations/<int:pk>/breadcrumbs/", breadcrumb_test),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

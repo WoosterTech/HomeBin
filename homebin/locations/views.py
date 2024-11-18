@@ -1,5 +1,7 @@
 # Create your views here.
-from django.http import HttpRequest
+import logging
+
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django_tables2 import SingleTableView
@@ -15,6 +17,8 @@ from homebin.locations.tables import (
     LocationsTable,
     LocationTable,
 )
+
+logger = logging.getLogger(__name__)
 
 register_path_decoding(container_label=Container.label, location_pk=Location)
 
@@ -37,6 +41,18 @@ class LocationListPage(BasePage):
     locations_table = LocationsTable()
 
 
+def breadcrumbs_link(location, **kwargs):
+    logger.warning("this is something")
+    breadcrumbs = location.breadcrumbs()
+    a_tag_list = [
+        html.a(
+            crumb.name, attrs__href=reverse("location-detail", kwargs={"pk": crumb.pk})
+        )
+        for crumb in breadcrumbs
+    ]
+    return html.div(*a_tag_list)
+
+
 class LocationDetailPage(BasePage):
     title = html.h1(lambda location, **_: location.name)
     actions = html.div(
@@ -52,6 +68,8 @@ class LocationDetailPage(BasePage):
         ),
         attrs__class={"btn-group": True},
     )
+    # TODO: add breadcrumbs
+    parents = breadcrumbs_link
     table_title = html.h3("Related Containers")
     related_containers = ContainersTable(
         rows=lambda location, **_: location.containers.all(),
@@ -151,3 +169,10 @@ class LocationListView(SingleTableView):
     model = Location
     table_class = LocationTable
     template_name = "base_list.html"
+
+
+def breadcrumb_test(request: HttpRequest, pk: int):
+    location = Location.objects.get(pk=pk)
+    return HttpResponse(
+        f"Breadcrumbs are {[loc.name for loc in location.breadcrumbs()]}"
+    )

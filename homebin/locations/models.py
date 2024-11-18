@@ -36,6 +36,13 @@ class Location(HistoryModel, NaturalKeyModel):
         logger.debug("get_absolute_url: %s", self.pk)
         return reverse("location-detail", args=[self.pk])
 
+    def breadcrumbs(self) -> list["Location"]:
+        breadcrumbs = [self] + (
+            self.parent_location.breadcrumbs() if self.parent_location else []
+        )
+        logger.debug("breadcrumbs: %s", breadcrumbs)
+        return breadcrumbs
+
 
 def default_container_label():
     """A simple way to generate a unique label for containers."""

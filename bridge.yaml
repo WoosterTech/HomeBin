@@ -1,0 +1,4 @@
+enable_postgres: true
+enable_worker: false
+postgres_image: postgres:12
+postgres_name: bridge_postgres

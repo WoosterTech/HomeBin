@@ -169,6 +169,8 @@ class ContainerDetailPage(BasePage):
             attrs__class={"list-group": True, "mt-3": True},
         )
     )
+    attachments_title = html.h3("Attachments")
+    # images = AttachmentTable
 
 
 def container_detail(request: HttpRequest, label: str):

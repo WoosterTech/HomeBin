@@ -17,6 +17,7 @@ from homebin.assets.admin import MyAdmin
 from homebin.assets.models import Asset
 from homebin.assets.tables import AssetTable
 from homebin.assets.views import (
+    AssetAttachmentForm,
     AssetDetailPage,
     AssetListPage,
     ManufacturerDetailPage,
@@ -80,6 +81,7 @@ urlpatterns = [
         ManufacturerDetailPage().as_view(),
         name="manufacturer-detail",
     ),
+    path("attachments/<attachment_pk>/edit/", AssetAttachmentForm().as_view()),
     path("iommi-admin/", include(MyAdmin.urls())),
     path("locations/<int:pk>/breadcrumbs/", breadcrumb_test),
     # Media files

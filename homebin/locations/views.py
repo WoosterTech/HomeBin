@@ -41,7 +41,22 @@ class LocationListPage(BasePage):
     locations_table = LocationsTable()
 
 
-def breadcrumbs_link(location, **kwargs):
+def location_detail_actions(location, request, **_):
+    logger.debug("location_detail_actions %s", location)
+    if location.parent_location:
+
+        def attrs_href(location, **_):
+            return location.parent_location.get_absolute_url()
+
+        return html.a(
+            lambda location, **_: f"Up to {location.parent_location}",
+            attrs__href=attrs_href,
+        ).bind(request=request)
+
+    return None
+
+
+def breadcrumbs_link(*args, location, **kwargs):
     logger.warning("this is something")
     breadcrumbs = location.breadcrumbs()
     a_tag_list = [
@@ -54,7 +69,12 @@ def breadcrumbs_link(location, **kwargs):
 
 
 class LocationDetailPage(BasePage):
+    breadcrumbs = html.div(
+        location_detail_actions,
+    )
+    new_breadcrumbs = html.div(breadcrumbs_link)
     title = html.h1(lambda location, **_: location.name)
+
     actions = html.div(
         html.a(
             "List",
@@ -68,6 +88,12 @@ class LocationDetailPage(BasePage):
         ),
         attrs__class={"btn-group": True},
     )
+
+    sub_locations_table_title = html.h3("Sub Locations")
+    sub_locations = LocationsTable(
+        rows=lambda location, **_: location.location_set.all(),
+    )
+
     # TODO: add breadcrumbs
     parents = breadcrumbs_link
     table_title = html.h3("Related Containers")
@@ -124,7 +150,7 @@ class ContainerDetailPage(BasePage):
             item_row(
                 "Description", lambda container, **_: container.container_description
             ),
-            item_row("Serial Number", lambda container, **_: container.simple_contents),
+            item_row("Contents", lambda container, **_: container.simple_contents),
             html.li(
                 html.span("Location: ", attrs__class=item_label_class),
                 html.a(

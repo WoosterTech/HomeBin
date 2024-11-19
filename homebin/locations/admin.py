@@ -7,8 +7,21 @@ from django.contrib import admin
 from homebin.attachments.admin import GenericAttachmentInline
 from homebin.locations.models import Container, Location
 
+
 # Register your models here.
-admin.site.register(Location)
+class ContainerInline(admin.TabularInline):
+    model = Container
+    extra = 0
+
+
+class SubLocationInline(admin.TabularInline):
+    model = Location
+    extra = 0
+
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    inlines = [ContainerInline]
 
 
 @admin.register(Container)

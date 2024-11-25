@@ -5,10 +5,10 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django_tables2 import SingleTableView
-from easy_thumbnails.files import get_thumbnailer
 from iommi import html
 from iommi.path import register_path_decoding
 
+from homebin.assets.tables import AssetTable
 from homebin.helpers.views import BasePage, item_label_class, item_row, item_row_class
 from homebin.locations.models import Container, Location
 from homebin.locations.tables import (
@@ -21,6 +21,17 @@ from homebin.locations.tables import (
 logger = logging.getLogger(__name__)
 
 register_path_decoding(container_label=Container.label, location_pk=Location)
+
+
+def primary_thumbnail_or_none(request: HttpRequest, container: "Container | None", **_):
+    if container.primary_thumbnail is None:
+        logger.info("No primary image for %s", container)
+        return None
+    logger.info("Primary image for %s is %s", container, container.primary_thumbnail)
+    return html.img(
+        attrs__src=lambda container, **_: container.primary_thumbnail["medium"].url,
+        attrs__alt=lambda container, **_: container.label,
+    ).bind(request=request)
 
 
 class LocationListPage(BasePage):
@@ -56,23 +67,35 @@ def location_detail_actions(location, request, **_):
     return None
 
 
-def breadcrumbs_link(*args, location, **kwargs):
-    logger.warning("this is something")
-    breadcrumbs = location.breadcrumbs()
-    a_tag_list = [
-        html.a(
-            crumb.name, attrs__href=reverse("location-detail", kwargs={"pk": crumb.pk})
+def breadcrumbs_link(request: HttpRequest, location: Location, **kwargs):
+    logger.warning("breadcrumbs_link: %s", location)
+    breadcrumbs = reversed(location.breadcrumbs())
+    ol_list = [
+        html.li(
+            (
+                html.a(
+                    crumb.name.title(),
+                    attrs__href=reverse(
+                        "location-detail", kwargs={"location_pk": crumb.pk}
+                    ),
+                )
+                if crumb != location
+                else crumb.name.title()
+            ),
+            attrs__class={"breadcrumb-item": True},
+            attrs__aria_current="page" if crumb == location else None,
         )
         for crumb in breadcrumbs
     ]
-    return html.div(*a_tag_list)
+
+    return html.ol(
+        *ol_list,
+        attrs__class={"breadcrumb": True},
+    ).bind(request=request)
 
 
 class LocationDetailPage(BasePage):
-    breadcrumbs = html.div(
-        location_detail_actions,
-    )
-    new_breadcrumbs = html.div(breadcrumbs_link)
+    breadcrumbs = html.nav(breadcrumbs_link, attrs__aria_label="breadcrumb")
     title = html.h1(lambda location, **_: location.name)
 
     actions = html.div(
@@ -94,11 +117,14 @@ class LocationDetailPage(BasePage):
         rows=lambda location, **_: location.location_set.all(),
     )
 
-    # TODO: add breadcrumbs
-    parents = breadcrumbs_link
     table_title = html.h3("Related Containers")
     related_containers = ContainersTable(
         rows=lambda location, **_: location.containers.all(),
+    )
+
+    asset_table_title = html.h3("Related Assets")
+    related_assets = AssetTable(
+        rows=lambda location, **_: location.asset_set.all(),
     )
 
 
@@ -120,6 +146,16 @@ class ContainerListPage(BasePage):
     containers_table = ContainersTable()
 
 
+def row_with_link(label, field_object, **kwargs):
+    return (
+        html.span(f"{label}: ", attrs__class=item_label_class),
+        html.a(
+            field_object,
+            attrs__href=field_object.get_absolute_url(),
+        ),
+    )
+
+
 class ContainerDetailPage(BasePage):
     title = html.h1(lambda container, **_: container.label)
     actions = html.div(
@@ -135,16 +171,7 @@ class ContainerDetailPage(BasePage):
         ),
         attrs__class={"btn-group": True},
     )
-    primary_image = html.div(
-        html.img(
-            attrs__src=lambda container, **_: (
-                get_thumbnailer(container.primary_image)["medium"].url
-                if container.primary_image
-                else None
-            ),
-            attrs__alt=lambda container, **_: container.label,
-        ),
-    )
+    primary_image = html.div(primary_thumbnail_or_none, attrs__class={"mt-3": True})
     container = html.div(
         html.ul(
             item_row(
@@ -170,7 +197,7 @@ class ContainerDetailPage(BasePage):
         )
     )
     attachments_title = html.h3("Attachments")
-    # images = AttachmentTable
+    # TODO: attachments = AttachmentsTable()
 
 
 def container_detail(request: HttpRequest, label: str):

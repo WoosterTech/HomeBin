@@ -4,6 +4,7 @@ from adminsortable2.admin import (
 )
 from django.contrib import admin
 
+from homebin.assets.models import Asset
 from homebin.attachments.admin import GenericAttachmentInline
 from homebin.locations.models import Container, Location
 
@@ -19,9 +20,15 @@ class SubLocationInline(admin.TabularInline):
     extra = 0
 
 
+class AssetInline(admin.TabularInline):
+    model = Asset
+    extra = 0
+    fields = ["name", "model"]
+
+
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    inlines = [ContainerInline]
+    inlines = [ContainerInline, AssetInline, SubLocationInline]
 
 
 @admin.register(Container)

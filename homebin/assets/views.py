@@ -36,8 +36,7 @@ class AssetListPage(BasePage):
 
 
 def primary_thumbnail_or_none(request, asset: Asset | None, **_):
-    logger.info("hello?")
-    if asset.primary_thumbnail is None:
+    if asset.primary_thumbnail is None or asset is None:
         return None
     return html.img(
         attrs__src=lambda asset, **_: asset.primary_thumbnail["medium"].url,
@@ -63,23 +62,30 @@ class AssetDetailPage(BasePage):
         attrs__class={"btn-group": True},
     )
     # TODO: use a lambda that returns a Fragment?
-    primary_image = html.div(primary_thumbnail_or_none)
+    primary_image = html.div(primary_thumbnail_or_none, attrs__class={"mt-3": True})
     asset = html.div(
         html.ul(
             html.li(
                 html.span("Make: ", attrs__class=item_label_class),
                 html.a(
                     lambda asset, **_: asset.make,
-                    attrs__href=lambda asset, **_: reverse(
-                        "manufacturer-detail",
-                        kwargs={"manufacturer_slug": asset.make.slug},
-                    ),
+                    attrs__href=lambda asset, **_: asset.make.get_absolute_url(),
                 ),
                 attrs__class=item_row_class,
             ),
             item_row("Model", lambda asset, **_: asset.model),
             item_row("Serial Number", lambda asset, **_: asset.serial_number),
             item_row("Description", lambda asset, **_: asset.description),
+            html.li(
+                html.span("Location: ", attrs__class=item_label_class),
+                html.a(
+                    lambda asset, **_: asset.location,
+                    attrs__href=lambda asset, **_: (
+                        asset.location.get_absolute_url() if asset.location else ""
+                    ),
+                ),
+                attrs__class=item_row_class,
+            ),
             attrs__class={"list-group": True, "mt-3": True},
         )
     )

@@ -43,6 +43,9 @@ class Asset(ItemBaseModel, HistoryModel):
     notes = models.TextField(blank=True)
     natural_key_fields = ["name", "serial_number"]
     attachments = GenericRelation(GenericAttachment, related_query_name="asset")
+    location = models.ForeignKey(
+        "locations.Location", on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     @property
     def primary_image(self):

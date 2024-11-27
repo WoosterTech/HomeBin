@@ -63,7 +63,6 @@ def collapsible_widget(
 def linebreaks(request: "HttpRequest", container: "Container", **_):
     content_lines = container.simple_contents.split("\n")
     lines = [format_html("{}<br>", line) for line in content_lines]
-    logger.debug("lines w/ breaks: %s", lines)
 
     lines = collapsible_widget(lines, request.GET.copy())
 

@@ -6,18 +6,16 @@ class LocationsConfig(AppConfig):
     name = "homebin.locations"
 
     def ready(self):
-        from django.contrib.staticfiles.storage import staticfiles_storage
+        from django.templatetags.static import static
         from iommi import Asset, Style, register_style
         from iommi.style import get_global_style
 
-        static_prefix = staticfiles_storage.url("")
         bootstrap5 = get_global_style("bootstrap5")
         my_style = Style(
             bootstrap5,
             base_template="iommi_base.html",
             root__assets__project_css=Asset.css(
-                attrs__href=f"{static_prefix}css/project.css",
-                attrs__rel="stylesheet",
+                attrs__src=lambda **_: static("css/project.css"),
             ),
         )
 

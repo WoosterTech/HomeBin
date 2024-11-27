@@ -7,7 +7,16 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
 from .base import *  # noqa: F403
-from .base import DATABASES, INSTALLED_APPS, SPECTACULAR_SETTINGS, env, logger, secrets
+from .base import (
+    DATABASES,
+    DEBUG,
+    INSTALLED_APPS,
+    SPECTACULAR_SETTINGS,
+    STORAGES,
+    env,
+    logger,
+    secrets,
+)
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -96,16 +105,11 @@ AWS_DEFAULT_ACL = env("DJANGO_AWS_DEFAULT_ACL", default="private")
 logger.info(f"Default ACL: {AWS_DEFAULT_ACL}")
 # STATIC & MEDIA
 # ------------------------
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-            "location": "media",
-            "file_overwrite": False,
-        },
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+STORAGES["default"] = {
+    "BACKEND": "storages.backends.s3.S3Storage",
+    "OPTIONS": {
+        "location": "media",
+        "file_overwrite": False,
     },
 }
 MEDIA_URL = f"https://{aws_s3_domain}/media/"
@@ -222,3 +226,7 @@ sentry_sdk.init(
 SPECTACULAR_SETTINGS["SERVERS"] = [
     {"url": "https://homebin.wooster.xyz", "description": "Production server"},
 ]
+
+logger.info("Final DEBUG? {}", DEBUG)
+
+logger.success("Production settings loaded successfully!")

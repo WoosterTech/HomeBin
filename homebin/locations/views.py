@@ -307,5 +307,7 @@ class ContainerQueryForm(Form):
 
 
 class ContainerQueryPage(BasePage):
-    title = html.h1("Container Query")
     label_form = ContainerQueryForm()
+
+    class Meta:
+        title = "Container Query"

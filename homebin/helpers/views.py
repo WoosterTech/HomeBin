@@ -10,7 +10,11 @@ logger = logging.getLogger(__name__)
 
 
 class BasePage(Page):
-    title = html.h1("HomeBin")
+    title = html.h1(lambda page, **_: page.title.title())
+
+    class Meta:
+        title = "HomeBin"
+        parts__h_tag__children = None
 
 
 class IndexPage(BasePage):

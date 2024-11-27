@@ -54,7 +54,7 @@ indent_size = 2
 
 [tool.poetry]
 name = "homebin"
-version = "0.2.0a7"
+version = "0.2.0a8"
 description = "Home Inventory and Storage Organization System"
 authors = ["Karl Wooster <karl@woostertech.com>"]
 license = "MIT"

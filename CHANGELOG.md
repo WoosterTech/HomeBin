@@ -1,3 +1,9 @@
+## 0.2.0a8 (2024-11-26)
+
+### Feat
+
+- **views**: many fixes including searching, collapsible fields, adding a footer, messages, etc
+
 ## 0.2.0a7 (2024-11-25)
 
 ### Feat

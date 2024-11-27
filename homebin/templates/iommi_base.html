@@ -1,5 +1,9 @@
-{% extends "iommi/base.html" %}
+{% extends "iommi_base2.html" %}
 
 {% block iommi_top %}
   <c-navbar></c-navbar>
+  <c-messages></c-messages>
 {% endblock iommi_top %}
+{% block iommi_bottom %}
+  <c-footer></c-footer>
+{% endblock iommi_bottom %}

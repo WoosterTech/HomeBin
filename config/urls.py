@@ -28,6 +28,7 @@ from homebin.locations.models import Container, Location
 from homebin.locations.views import (
     ContainerDetailPage,
     ContainerListPage,
+    ContainerQueryPage,
     LocationDetailPage,
     LocationListPage,
     breadcrumb_test,
@@ -53,6 +54,12 @@ urlpatterns = [
         "containers/create/",
         Form.create(auto__model=Container).as_view(),
         name="container-create",
+    ),
+    path("containers/find/", ContainerQueryPage().as_view(), name="container-scan"),
+    path(
+        "containers/<container_label>/edit/",
+        Form.edit(auto__instance=Container).as_view(),
+        name="container-edit",
     ),
     path(
         "containers/<container_label>/",

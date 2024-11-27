@@ -218,6 +218,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "homebin.users.context_processors.allauth_settings",
+                "homebin.helpers.context.context_processor.site_config",
             ],
         },
     },
@@ -286,7 +287,7 @@ LOGGING = {
             "formatter": "verbose",
         },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {"level": "DEBUG" if DEBUG else "INFO", "handlers": ["console"]},
 }
 
 
@@ -382,5 +383,6 @@ def IOMMI_DEBUG_URL_BUILDER(filename, lineno):  # noqa: N802
     return f"vscode://file/{filename}: {'' if lineno is None else lineno}"
 
 
+IOMMI_DEFAULT_STYLE = "my_style"
 # Your stuff...
 # ------------------------------------------------------------------------------

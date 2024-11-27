@@ -56,15 +56,3 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-
-# Your stuff...
-# ------------------------------------------------------------------------------
-
-
-from iommi import Style  # noqa: E402
-from iommi.style_bootstrap5 import bootstrap5  # noqa: E402
-
-IOMMI_DEFAULT_STYLE = Style(
-    bootstrap5,
-    base_template="iommi_base.html",
-)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html {% block iommi_html_tag_attrs %}
+      lang="{{ iommi_language_code }}"
+      {% endblock iommi_html_tag_attrs %}>
+  <head>
+    <title>
+      {% block title %}
+        {{ title }}
+      {% endblock title %}
+    </title>
+    {% block iommi_head_contents %}
+    {% endblock iommi_head_contents %}
+    {% for asset in assets.values %}
+      {% if not asset.in_body %}{{ asset }}{% endif %}
+    {% endfor %}
+    {% block iommi_head_contents_last %}
+    {% endblock iommi_head_contents_last %}
+  </head>
+  <body {% block iommi_body_tag_attrs %}{% endblock iommi_body_tag_attrs %}>
+    {% block iommi_top %}
+    {% endblock iommi_top %}
+    {{ container.iommi_open_tag }}
+    {% block content %}
+    {% endblock content %}
+    {{ container.iommi_close_tag }}
+    {% block iommi_bottom %}
+    {% endblock iommi_bottom %}
+    {% for asset in assets.values %}
+      {% if asset.in_body %}{{ asset }}{% endif %}
+    {% endfor %}
+  </body>
+  {% if debug %}
+    <pre class="d-print-none">{% debug %}</pre>
+  {% endif %}
+</html>

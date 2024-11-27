@@ -19,6 +19,7 @@ class IndexPage(BasePage):
 
 item_label_class = {"fw-bold": True, "text-muted": True}
 item_row_class = {"list-group-item": True}
+admin_button_class = {"btn": True, "btn-secondary": True}
 
 
 def item_row(

@@ -9,11 +9,25 @@
             "type": "debugpy",
             "request": "launch",
             "args": [
-                "runserver"
+                "runserver",
+                "8001"
             ],
             "django": true,
             "autoStartBrowser": false,
             "program": "${workspaceFolder}\\manage.py"
+        },
+        {
+            "name": "Django: External",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "runserver",
+                "8001"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "justMyCode": false
         }
     ]
 }

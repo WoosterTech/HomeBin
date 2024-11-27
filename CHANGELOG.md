@@ -1,3 +1,13 @@
+## 0.2.0a9 (2024-11-27)
+
+### Feat
+
+- **views**: proper title, use templatetags.static.static for asset base
+
+### Fix
+
+- **compress**: better asset definition and templating to handle compression better
+
 ## 0.2.0a8 (2024-11-26)
 
 ### Feat

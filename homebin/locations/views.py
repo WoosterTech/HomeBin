@@ -219,7 +219,7 @@ class ContainerDetailPage(BasePage):
         attrs__class={"btn-group": True},
         iommi_style="my_style",
     )
-    primary_image = html.div(primary_thumbnail_or_none, attrs__class={"mt-3": True})
+    primary_image = html.div(primary_thumbnail_or_none, attrs__loading=True, attrs={"width": "200","height": "200"}, attrs__class={"mt-3": True})
     container = html.div(
         html.ul(
             item_row(

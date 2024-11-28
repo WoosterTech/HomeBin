@@ -136,8 +136,8 @@ class LocationDetailPage(BasePage):
     )
 
     table_title = html.h3("Related Containers")
-    related_containers = containers_table__rows = (
-        lambda location, **_: location.containers.all()
+    related_containers = ContainersTable(
+        rows=lambda location, **_: location.containers.all()
     )
 
     asset_table_title = html.h3("Related Assets")

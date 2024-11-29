@@ -1,3 +1,9 @@
+## 0.2.0a10 (2024-11-29)
+
+### Refactor
+
+- **views**: refactor code to split up containers and locations; "better" thumbnails
+
 ## 0.2.0a9 (2024-11-27)
 
 ### Feat

@@ -86,8 +86,8 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     "adminsortable2",
-    "crispy_forms",
-    "crispy_bootstrap5",
+    # "crispy_forms",
+    # "crispy_bootstrap5",
     "allauth",
     "allauth.account",
     "allauth.mfa",

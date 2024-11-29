@@ -71,10 +71,7 @@ gunicorn = { version = "^23.0.0", platform = "linux" }
 # base
 # -----------------------------------------------------------
 django-environ = "^0.11.2"
-django-model-utils = "^5.0.0"
 django-allauth = { version = "^65.2.0", extras = ["mfa"] }
-django-crispy-forms = "^2.3"
-crispy-bootstrap5 = "^2024.10"
 django-compressor = "^4.5.1"
 django-redis = "^5.4.0"
 djangorestframework = "^3.12.2"
@@ -93,14 +90,13 @@ loguru = "^0.7.2"
 pydantic = "^2.9.2"
 typeid-python = "^0.3.1"
 django-rubble = { git = "https://github.com/WoosterTech/django-rubble.git", extras = [
-    "django-simple-histroy",
+    "history",
     "secrets",
 ] }
 psycopg = { extras = ["binary"], version = "^3.2.3" }
 django-simple-history = "^3.7.0" # dependency of django-rubble[django-simple-history] but not getting installed properly
 django-cotton = "^1.2.1"
 django-admin-thumbnails = "^0.2.9"
-django-jazzmin = "^3.0.1"
 django-admin-sortable2 = "^2.2.3"
 django-tables2 = "^2.7.0"
 easy-thumbnails = "^2.10"
@@ -129,6 +125,7 @@ pre-commit = "^4.0.1"
 # -----------------------------------------------------------
 django-debug-toolbar = "^4.4.6"
 psycopg = { extras = ["binary"], version = "^3.2.3" }
+deptry = "^0.21.1"
 
 
 [tool.poetry.group.test]
@@ -157,6 +154,30 @@ optional = true
 
 [tool.poetry.group.prod.dependencies]
 psycopg = { extras = ["c"], version = "^3.2.3" }
+
+[tool.deptry]
+extend_exclude = [".*/tests/", ".*/conftest.py"]
+
+[tool.deptry.per_rule_ignores]
+DEP004 = ["debug_toolbar"]  # imported in urls when DEBUG is True
+DEP002 = [  # used in settings.INSTALLED_APPS (and others)
+    "gunicorn",
+    "django-compressor",
+    "django-redis",
+    "django-cors-headers",
+    "hiredis",
+    "django-storages",
+    "django-anymail",
+    "pillow",
+    "argon2-cffi",
+    "whitenoise",
+    "redis",
+    "psycopg",
+    "django-cotton"
+]
+
+[tool.deptry.package_module_name_map]
+gunicorn = "gunicorn"
 
 [tool.commitizen]
 name = "cz_conventional_commits"

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from django_tables2 import columns, tables
 from easy_thumbnails.files import get_thumbnailer
-from iommi import Column, Table
+from iommi import Column, Table, html
 
 from homebin.locations import linebreaks
 from homebin.locations.models import Container, Location
@@ -81,7 +81,15 @@ class ContainersTable(Table):
         model_field_name="location",
     )
     primary_image = Column(
-        cell__value=lambda row, **_: get_thumbnailer_or_none(row.primary_image),
+        cell__value=lambda request, row, **_: (
+            html.img(
+                attrs__src=row.primary_thumbnail["avatar"].url,
+                attrs__loading="lazy",
+                attrs={"width": 100, "height": 100},
+            ).bind(request=request)
+            if row.primary_thumbnail
+            else None
+        ),
         cell__template="table_thumbnail.html",
     )
 

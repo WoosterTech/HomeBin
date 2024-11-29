@@ -26,13 +26,14 @@ from homebin.assets.views import (
 from homebin.helpers.views import IndexPage
 from homebin.locations.models import Container, Location
 from homebin.locations.views import (
+    ContainerQueryPage,
+    breadcrumb_test,
     ContainerDetailPage,
     ContainerListPage,
-    ContainerQueryPage,
     LocationDetailPage,
     LocationListPage,
-    breadcrumb_test,
 )
+from homebin.locations.views.container_views import ContainerCreateForm
 
 urlpatterns = [
     # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -52,7 +53,7 @@ urlpatterns = [
     path("containers/", ContainerListPage().as_view(), name="container-list"),
     path(
         "containers/create/",
-        Form.create(auto__model=Container).as_view(),
+        ContainerCreateForm().as_view(),
         name="container-create",
     ),
     path("containers/find/", ContainerQueryPage().as_view(), name="container-scan"),

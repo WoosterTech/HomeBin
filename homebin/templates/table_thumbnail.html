@@ -1,6 +1,6 @@
 <td>
   {% if value %}
-    <img src="{{ value.url }}" alt="{{ row.name }}" />
+    {{ value|safe }}
   {% else %}
     <span>No image</span>
   {% endif %}

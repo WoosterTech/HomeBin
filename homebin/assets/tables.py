@@ -17,8 +17,8 @@ class AssetTable(Table):
     model = Column()
     serial_number = Column()
     primary_image = Column(
-        cell__value=lambda row, **_: (
-            html.img(get_thumbnailer(row.primary_image)["thumbnail"].url)
+        cell__value=lambda request, row, **_: (
+            html.img(get_thumbnailer(row.primary_image)["thumbnail"].url).bind(request=request)
             if row.primary_image
             else None
         ),

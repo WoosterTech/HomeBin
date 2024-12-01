@@ -1,3 +1,9 @@
+## 0.2.0a11 (2024-12-01)
+
+### Feat
+
+- **ContainerTables**: use cards instead of individual columns for containers
+
 ## 0.2.0a10 (2024-11-29)
 
 ### Refactor

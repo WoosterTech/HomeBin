@@ -1,5 +1,5 @@
 from easy_thumbnails.files import get_thumbnailer
-from iommi import Column, Table
+from iommi import Column, Table, html
 
 from homebin.assets.models import Asset, Manufacturer
 
@@ -17,9 +17,13 @@ class AssetTable(Table):
     model = Column()
     serial_number = Column()
     primary_image = Column(
-        cell__value=lambda row, **_: (
-            get_thumbnailer(row.primary_image)["thumbnail"]
-            if row.primary_image
+        cell__value=lambda request, row, **_: (
+            html.img(
+                attrs__src=row.primary_thumbnail["avatar"].url,
+                attrs__loading="lazy",
+                attrs={"width": 100, "height": 100},
+            ).bind(request=request)
+            if row.primary_thumbnail
             else None
         ),
         cell__template="table_thumbnail.html",

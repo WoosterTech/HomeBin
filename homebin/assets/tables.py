@@ -1,5 +1,5 @@
 from easy_thumbnails.files import get_thumbnailer
-from iommi import Column, Table
+from iommi import Column, Table, html
 
 from homebin.assets.models import Asset, Manufacturer
 

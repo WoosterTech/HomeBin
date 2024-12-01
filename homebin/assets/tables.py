@@ -18,12 +18,13 @@ class AssetTable(Table):
     serial_number = Column()
     primary_image = Column(
         cell__value=lambda request, row, **_: (
-             html.img(
+            html.img(
                 attrs__src=row.primary_thumbnail["avatar"].url,
                 attrs__loading="lazy",
                 attrs={"width": 100, "height": 100},
             ).bind(request=request),
-        cell__template="table_thumbnail.html",)
+            cell__template="table_thumbnail.html",
+        ),
     )
 
     class Meta:

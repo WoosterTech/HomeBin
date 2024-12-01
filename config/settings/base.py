@@ -5,6 +5,7 @@ from pathlib import Path
 
 import environ
 from django_rubble.secrets import Secrets
+from django_rubble.secrets.infisical import LongSecretStr
 from loguru import logger
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -24,7 +25,16 @@ if READ_DOT_ENV_FILE:
 DEBUG = env.bool("DJANGO_DEBUG", False)
 logger.info(f"DEBUG from ENV? {DEBUG}")
 
-secrets = Secrets()
+secrets = Secrets(
+    client_id=env("INFISICAL_CLIENT_ID"),
+    client_secret=LongSecretStr(env("INFISICAL_CLIENT_SECRET")),
+    project_id=env("INFISICAL_PROJECT_ID"),
+    environment=env("INFISICAL_ENVIRONMENT", default="dev"),
+    debug=DEBUG,
+)
+
+UNSPLASH_ACCESS_KEY = secrets.get_secret("UNSPLASH_ACCESS_KEY").secret_value
+UNSPLASH_BASE_URL = "https://api.unsplash.com/"
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -86,12 +96,12 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     "adminsortable2",
-    # "crispy_forms",
-    # "crispy_bootstrap5",
     "allauth",
     "allauth.account",
     "allauth.mfa",
     "allauth.socialaccount",
+    "crispy_forms",  # used by allauth
+    "crispy_bootstrap5",  # used by allauth
     "django_cotton",
     "django_rubble",
     "django_tables2",

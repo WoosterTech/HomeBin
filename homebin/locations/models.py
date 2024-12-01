@@ -62,7 +62,9 @@ class Container(HistoryModel, NaturalKeyModel):
         max_length=25, unique=True, default=default_container_label
     )
     container_description = models.CharField(
-        _("description of container; e.g. 'black w/ yellow lid'"), max_length=100
+        _("description of container"),
+        help_text=_("e.g. 'black w/ yellow lid'"),
+        max_length=100,
     )
     simple_contents = models.TextField(_("simple description of contents"), blank=True)
     location = models.ForeignKey(

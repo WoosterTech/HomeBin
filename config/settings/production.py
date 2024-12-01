@@ -204,10 +204,6 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": False,
         },
-        "compressor": {
-            "level": "DEBUG",
-            "handlers": ["console"],
-        },
     },
 }
 

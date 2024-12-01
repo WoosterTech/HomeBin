@@ -15,7 +15,7 @@ from homebin.helpers.views import (
 )
 from homebin.locations import linebreaks, thumbnail_generator
 from homebin.locations.models import Container
-from homebin.locations.tables import ContainersTable
+from homebin.locations.tables import ContainerCardTable
 from homebin.locations.views.all_views import admin_container_change
 
 if TYPE_CHECKING:
@@ -44,19 +44,12 @@ class ContainerListPage(BasePage):
         admin_container_changelist,
         attrs__class={"btn-group": True},
     )
-    containers_table = ContainersTable()
+    containers_table = ContainerCardTable()
 
 
 class ContainerDetailPage(BasePage):
     title = html.h1(lambda container, **_: container.label)
     actions = html.div(
-        html.a(
-            "Edit",
-            attrs__href=lambda container, **_: reverse(
-                "container-edit", kwargs={"container_label": container.label}
-            ),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
         html.a(
             "List",
             attrs__href=lambda **_: reverse("container-list"),

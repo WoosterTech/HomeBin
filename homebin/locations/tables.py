@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
 
+import requests
+from django.conf import settings
 from django_tables2 import columns, tables
-from easy_thumbnails.files import get_thumbnailer
+from easy_thumbnails.files import Thumbnailer, get_thumbnailer
+from furl import furl
 from iommi import Column, Table, html
 
 from homebin.locations import linebreaks
@@ -9,6 +12,9 @@ from homebin.locations.models import Container, Location
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
+
+UNSPLASH_ACCESS_KEY = settings.UNSPLASH_ACCESS_KEY or None
+UNSPLASH_BASE_URL = settings.UNSPLASH_BASE_URL or None
 
 
 class ContainerTable(tables.Table):
@@ -92,6 +98,67 @@ class ContainersTable(Table):
         ),
         cell__template="table_thumbnail.html",
     )
+
+    class Meta:
+        rows = Container.objects.all()
+
+
+def get_unsplash_url(base_url: str | furl, client_id: str | None):
+    base_url = furl(base_url) if isinstance(base_url, str) else base_url
+    base_url = base_url / "photos/random/"
+    full_url = base_url.add(
+        query_params={
+            "client_id": client_id,
+            "query": "crate",
+            "fit": "crop",
+            "crop": "entropy",
+            "w": 200,
+            "h": 200,
+        }
+    )
+    response = requests.get(full_url, timeout=10)
+    return response.json()["urls"]["thumb"]
+
+
+def get_thumbnail(thumbnailer: Thumbnailer | None):
+    if thumbnailer is not None:
+        return thumbnailer["thumbnail"].url
+    return get_unsplash_url(base_url=UNSPLASH_BASE_URL, client_id=UNSPLASH_ACCESS_KEY)
+
+
+class ContainerCardTable(Table):
+    card = Column(
+        cell__value=lambda request, row, **_: html.div(
+            html.a(
+                html.div(
+                    html.img(
+                        attrs__src=get_thumbnail(row.primary_thumbnail),
+                        attrs__loading="lazy",
+                        attrs={"width": 200, "height": 200},
+                        attrs__class={"card-img": True},
+                    ),
+                    html.div(
+                        html.h3(row.label, attrs__class__card_title=True),
+                        html.p(row.location, attrs__class__card_text=True),
+                        attrs__class={"card-img-overlay": True},
+                    ),
+                    attrs__class={
+                        "card": True,
+                        "text-center": True,
+                        "text-white": True,
+                        "bg-dark": True,
+                    },
+                    attrs__style__width="200px;",
+                ),
+                attrs__href=row.get_absolute_url(),
+            ),
+        ).bind(request=request)
+    )
+    label = Column(filter__include=True, filter__freetext=True, render_column=False)
+    container_description = Column(
+        filter__include=True, filter__freetext=True, render_column=False
+    )
+    location = Column(filter__include=True, filter__freetext=True, render_column=False)
 
     class Meta:
         rows = Container.objects.all()

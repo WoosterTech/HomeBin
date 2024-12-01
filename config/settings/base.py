@@ -33,7 +33,7 @@ secrets = Secrets(
     debug=DEBUG,
 )
 
-UNSPLASH_ACCESS_KEY = secrets.get_secret("UNSPLASH_ACCESS_KEY").secret_value
+# UNSPLASH_ACCESS_KEY = secrets.get_secret("UNSPLASH_ACCESS_KEY").secret_value
 UNSPLASH_BASE_URL = "https://api.unsplash.com/"
 
 # Local time zone. Choices are

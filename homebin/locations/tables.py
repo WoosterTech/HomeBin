@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 import requests
-from django.conf import settings
 from django_tables2 import columns, tables
 from easy_thumbnails.files import Thumbnailer, get_thumbnailer
 from furl import furl
@@ -12,9 +11,6 @@ from homebin.locations.models import Container, Location
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
-
-UNSPLASH_ACCESS_KEY = settings.UNSPLASH_ACCESS_KEY or None
-UNSPLASH_BASE_URL = settings.UNSPLASH_BASE_URL or None
 
 
 class ContainerTable(tables.Table):
@@ -123,7 +119,7 @@ def get_unsplash_url(base_url: str | furl, client_id: str | None):
 def get_thumbnail(thumbnailer: Thumbnailer | None):
     if thumbnailer is not None:
         return thumbnailer["thumbnail"].url
-    return get_unsplash_url(base_url=UNSPLASH_BASE_URL, client_id=UNSPLASH_ACCESS_KEY)
+    return "https://placehold.co/200x200/grey/grey/svg"
 
 
 class ContainerCardTable(Table):

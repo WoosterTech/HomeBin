@@ -22,8 +22,8 @@ class AssetTable(Table):
                 attrs__src=row.primary_thumbnail["avatar"].url,
                 attrs__loading="lazy",
                 attrs={"width": 100, "height": 100},
-            ).bind(request=request),
-        ),
+            ),
+        ).bind(request=request),
         cell__template="table_thumbnail.html",
     )
 

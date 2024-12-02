@@ -119,7 +119,7 @@ def get_unsplash_url(base_url: str | furl, client_id: str | None):
 def get_thumbnail(thumbnailer: Thumbnailer | None):
     if thumbnailer is not None:
         return thumbnailer["thumbnail"].url
-    return "https://placehold.co/200x200/grey/grey/svg"
+    return "https://placehold.co/200x200/grey/white/svg?text=empty"
 
 
 class ContainerCardTable(Table):

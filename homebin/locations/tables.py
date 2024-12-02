@@ -154,7 +154,13 @@ class ContainerCardTable(Table):
     container_description = Column(
         filter__include=True, filter__freetext=True, render_column=False
     )
-    location = Column(filter__include=True, render_column=False)
+    location = Column.from_model(
+        filter__include=True,
+        filter__field__required=False,
+        model=Container,
+        model_field_name="location",
+        render_column=False,
+    )
 
     class Meta:
         rows = Container.objects.all()

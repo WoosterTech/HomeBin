@@ -15,16 +15,14 @@ def site_config(*_):
     if not isinstance(app, HelpersConfig):
         raise InvalidConfigError
 
-    version_info = app.python_version
+    version_info = app.python_version_string
     current_year = now().year
 
     return {
         "PROJECT_VERSION": app.project_version,
         "COMMIT_HASH": app.commit_hash,
         "DJANGO_VERSION": app.django_version,
-        "PYTHON_VERSION": (
-            f"{version_info.major}.{version_info.minor}.{version_info.micro}_{version_info.releaselevel}"
-        ),
+        "PYTHON_VERSION": (version_info),
         "COPYRIGHT": (
             format_html(
                 "Author: <a href='mailto:karl@woostertech.com?subject=HomeBin'>"

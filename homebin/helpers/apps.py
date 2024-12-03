@@ -48,3 +48,10 @@ class HelpersConfig(AppConfig):
         )
 
         register_style("my_style", my_style)
+
+    @property
+    def python_version_string(self):
+        version_info = self.python_version or None
+        if version_info is None:
+            return "unknown"
+        return f"{version_info.major}.{version_info.minor}.{version_info.micro}"

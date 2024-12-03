@@ -177,7 +177,9 @@ DEP002 = [  # used in settings.INSTALLED_APPS (and others)
     "whitenoise",
     "redis",
     "psycopg",
-    "django-cotton"
+    "django-cotton",
+    "django-crispy-forms",
+    "crispy-bootstrap5",
 ]
 
 [tool.deptry.package_module_name_map]

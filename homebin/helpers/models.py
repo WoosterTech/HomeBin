@@ -1,4 +1,6 @@
+from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django_rubble.models.number_models import NaturalKeyModel
 
 
@@ -21,3 +23,20 @@ class ItemBaseModel(NaturalKeyModel):
 
     def model_name(self):
         return self._meta.model_name
+
+
+class ActiveManager(models.Manager):
+    def active(self):
+        return self.filter(is_active=True)
+
+
+class ActiveModel(models.Model):
+    """Model that includes an `is_active` field and an `active` manager that filters
+    for active instances."""
+
+    is_active = models.BooleanField(_("Active"), default=True)
+
+    active = ActiveManager()
+
+    class Meta:
+        abstract = True

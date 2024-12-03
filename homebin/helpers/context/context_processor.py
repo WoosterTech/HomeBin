@@ -1,5 +1,3 @@
-import sys
-
 from django.apps import apps
 from django.utils.html import format_html
 from django.utils.timezone import now
@@ -17,11 +15,12 @@ def site_config(*_):
     if not isinstance(app, HelpersConfig):
         raise InvalidConfigError
 
-    version_info = sys.version_info
+    version_info = app.python_version
     current_year = now().year
 
     return {
         "PROJECT_VERSION": app.project_version,
+        "COMMIT_HASH": app.commit_hash,
         "DJANGO_VERSION": app.django_version,
         "PYTHON_VERSION": (
             f"{version_info.major}.{version_info.minor}.{version_info.micro}_{version_info.releaselevel}"

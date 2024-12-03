@@ -1,14 +1,17 @@
 # Create your views here.
 import logging
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 from django.conf import settings
 from django.db import models
+from furl import furl
 from iommi import Fragment, Page, html
+from pydantic import BaseModel
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
+    from easy_thumbnails.files import Thumbnailer
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +45,13 @@ def item_row(
 
 
 thumbnail_aliases = settings.THUMBNAIL_ALIASES[""]
+empty_thumbnail_url = furl("https://placehold.co/200x200/grey/white/svg?text=empty")
+
+
+def get_thumbnail(thumbnailer: "Thumbnailer | None"):
+    if thumbnailer is not None:
+        return thumbnailer["thumbnail"].url
+    return empty_thumbnail_url
 
 
 class Thumbnail:
@@ -88,3 +98,42 @@ class Thumbnail:
         )
 
         return getattr(self, method_name)
+
+
+class CardDefinition(BaseModel):
+    width: int = 200
+    height: int = 200
+    loading: Literal["lazy", "eager"] = "lazy"
+    overlay: bool = True
+    card_classes: list[str] = ["text-center", "text-white", "bg-dark"]
+    sub_text_field: str
+
+    def __getattr__(self, name: str):
+        instance_name = name.split("__")[1]
+
+        def card(request: "HttpRequest", **kwargs):
+            instance = kwargs.get(instance_name)
+            if instance is None:
+                return None
+            return html.div(
+                self._image(request, instance),
+                html.div(
+                    html.h3(instance.label, attrs__class__card_title=True),
+                    self._sub_text(request, instance),
+                    attrs__class={"card-img-overlay": self.overlay},
+                ),
+            )
+
+        return card
+
+    def _image(self, request: "HttpRequest", instance: models.Model, **_):
+        return html.img(
+            attrs__src=get_thumbnail(instance.primary_thumbnail),
+            attrs__loading=self.loading,
+            attrs={"width": self.width, "height": self.height},
+            attrs__class={"card-img": True},
+        ).bind(request=request)
+
+    def _sub_text(self, request: "HttpRequest", instance: models.Model, **_):
+        field_value = getattr(instance, self.sub_text_field)
+        return html.p(field_value, attrs__class__card_text=True).bind(request=request)

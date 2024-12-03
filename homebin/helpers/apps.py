@@ -1,4 +1,5 @@
-from django import get_version
+import sys
+
 from django.apps import AppConfig
 
 
@@ -6,15 +7,26 @@ class HelpersConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "homebin.helpers"
 
+    project_version: str | None = None
+    django_version: str | None = None
+    commit_hash: str | None = None
+    python_version = None
+
     def ready(self):
+        from django import get_version
         from django.templatetags.static import static
         from iommi import Asset, Style, register_style
         from iommi.style import get_global_style
 
         from homebin import __version__
 
+        from . import get_git_commit_hash
+
         self.project_version = __version__
         self.django_version = get_version()
+        self.python_version = sys.version_info
+
+        self.commit_hash = get_git_commit_hash() or "unknown"
 
         bootstrap5 = get_global_style("bootstrap5")
 

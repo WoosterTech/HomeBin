@@ -166,7 +166,6 @@ admin_changelist_action = Action.button(
 
 
 class ContainerCardTable(Table):
-    #select = Column.select()
     card = Column(
         cell__value=lambda request, row, **_: html.div(
             html.a(
@@ -199,7 +198,12 @@ class ContainerCardTable(Table):
     container_description = Column(
         filter__include=True, filter__freetext=True, render_column=False
     )
-    simple_contents = Column(filter__include=True,filter__field__required=False,filter__freetext=True,render_column=False)
+    simple_contents = Column(
+        filter__include=True,
+        filter__field__required=False,
+        filter__freetext=True,
+        render_column=False,
+    )
     location = Column.from_model(
         filter__include=True,
         filter__field__required=False,
@@ -207,7 +211,6 @@ class ContainerCardTable(Table):
         model_field_name="location",
         choices=lambda **_: Location.active.active(),
         render_column=False,
-        #bulk__include=True,
     )
 
     class Meta:

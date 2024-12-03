@@ -199,6 +199,7 @@ class ContainerCardTable(Table):
     container_description = Column(
         filter__include=True, filter__freetext=True, render_column=False
     )
+    simple_contents = Column(filter__include=True,filter__field__required=False,filter__freetext=True,render_column=False)
     location = Column.from_model(
         filter__include=True,
         filter__field__required=False,

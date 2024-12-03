@@ -625,6 +625,24 @@ jsbeautifier = "*"
 six = ">=1.13.0"
 
 [[package]]
+name = "data-wizard"
+version = "2.0.0"
+description = "Interactive web-based wizard for importing structured data into Django models."
+optional = false
+python-versions = "*"
+files = [
+    {file = "data-wizard-2.0.0.tar.gz", hash = "sha256:d66637824d1636246f891a32ecfb9da759ed78c2dc2ebc057602442fc344538a"},
+    {file = "data_wizard-2.0.0-py3-none-any.whl", hash = "sha256:f0e66e807d8509141be7feae62613c39fbb3d72fe672f620810f11ee3b6e6fab"},
+]
+
+[package.dependencies]
+djangorestframework = "*"
+html-json-forms = "*"
+itertable = ">=2.1.0"
+natural-keys = "*"
+python-dateutil = "*"
+
+[[package]]
 name = "decorator"
 version = "5.1.1"
 description = "Decorators for Humans"
@@ -1182,6 +1200,17 @@ files = [
 ]
 
 [[package]]
+name = "et-xmlfile"
+version = "2.0.0"
+description = "An implementation of lxml.xmlfile for the standard library"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "et_xmlfile-2.0.0-py3-none-any.whl", hash = "sha256:7a91720bc756843502c3b7504c77b8fe44217c85c537d85037f0f536151b2caa"},
+    {file = "et_xmlfile-2.0.0.tar.gz", hash = "sha256:dab3f4764309081ce75662649be815c4c9081e88f0837825f90fd28317d4da54"},
+]
+
+[[package]]
 name = "executing"
 version = "2.1.0"
 description = "Get the currently executing AST node of a frame, and other information"
@@ -1412,6 +1441,17 @@ files = [
 ]
 
 [[package]]
+name = "html-json-forms"
+version = "1.1.1"
+description = "Implementation of the HTML JSON Forms spec for use with the Django REST Framework."
+optional = false
+python-versions = "*"
+files = [
+    {file = "html-json-forms-1.1.1.tar.gz", hash = "sha256:16dc413dc858fcc53602ad509c1aef735534838e1bae888bf429e210a9c48f6b"},
+    {file = "html_json_forms-1.1.1-py3-none-any.whl", hash = "sha256:51e7e9088bc88e324027144ca25d8bcdd37da28f311a8436bfd88944138ed409"},
+]
+
+[[package]]
 name = "html-tag-names"
 version = "0.1.2"
 description = "List of known HTML tag names"
@@ -1607,6 +1647,27 @@ parallel = ["ipyparallel"]
 qtconsole = ["qtconsole"]
 test = ["packaging", "pickleshare", "pytest", "pytest-asyncio (<0.22)", "testpath"]
 test-extra = ["curio", "ipython[test]", "matplotlib (!=3.2.0)", "nbformat", "numpy (>=1.23)", "pandas", "trio"]
+
+[[package]]
+name = "itertable"
+version = "2.2.0"
+description = "Iterable API for tabular datasets including CSV, XLSX, XML, & JSON."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "itertable-2.2.0-py3-none-any.whl", hash = "sha256:422ba4f4fd95cda6138553c098d74d0b3ccc2bb90be02816e6cfaf0c79ff87e6"},
+    {file = "itertable-2.2.0.tar.gz", hash = "sha256:0ebdd0919a71ac2b8850fc3f45990fbe9520ec3cfd65eba00ab8f92785459314"},
+]
+
+[package.dependencies]
+click = "*"
+openpyxl = "*"
+requests = "*"
+
+[package.extras]
+gis = ["Fiona", "geopandas"]
+oldexel = ["xlrd", "xlwt"]
+pandas = ["pandas"]
 
 [[package]]
 name = "jedi"
@@ -1910,6 +1971,20 @@ files = [
 ]
 
 [[package]]
+name = "natural-keys"
+version = "2.1.1"
+description = "Enhanced support for natural keys in Django and Django REST Framework."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "natural-keys-2.1.1.tar.gz", hash = "sha256:67dbfdfd975fe19256c7385aae56b6c7d65d9f595523d1c75703ef91e292da16"},
+    {file = "natural_keys-2.1.1-py3-none-any.whl", hash = "sha256:5e8aaa3512ef3ed4012cd192455a6264f1b37a7ea185935d6eb20da82f7e9d18"},
+]
+
+[package.dependencies]
+html-json-forms = ">=1.0.0"
+
+[[package]]
 name = "nodeenv"
 version = "1.9.1"
 description = "Node.js virtual environment builder"
@@ -1919,6 +1994,20 @@ files = [
     {file = "nodeenv-1.9.1-py2.py3-none-any.whl", hash = "sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9"},
     {file = "nodeenv-1.9.1.tar.gz", hash = "sha256:6ec12890a2dab7946721edbfbcd91f3319c6ccc9aec47be7c7e6b7011ee6645f"},
 ]
+
+[[package]]
+name = "openpyxl"
+version = "3.1.5"
+description = "A Python library to read/write Excel 2010 xlsx/xlsm files"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "openpyxl-3.1.5-py2.py3-none-any.whl", hash = "sha256:5282c12b107bffeef825f4617dc029afaf41d0ea60823bbb665ef3079dc79de2"},
+    {file = "openpyxl-3.1.5.tar.gz", hash = "sha256:cf0e3cf56142039133628b5acffe8ef0c12bc902d2aadd3e0fe5878dc08d1050"},
+]
+
+[package.dependencies]
+et-xmlfile = "*"
 
 [[package]]
 name = "orderedmultidict"
@@ -3861,4 +3950,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8c3531d8a0312776eb4d97a38afd4a84dc4b306c436e32e0cb24528cce3d93b0"
+content-hash = "232974b40e1ef9326b7ad2f09e868c8da53d14729c6aed89b692029505f37ecf"

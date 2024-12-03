@@ -92,6 +92,7 @@ urlpatterns = [
     path("attachments/<attachment_pk>/edit/", AssetAttachmentForm().as_view()),
     path("iommi-admin/", include(MyAdmin.urls())),
     path("locations/<int:pk>/breadcrumbs/", breadcrumb_test),
+    path("datawizard/", include("data_wizard.urls")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

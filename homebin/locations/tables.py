@@ -1,7 +1,6 @@
 import logging
 from typing import TYPE_CHECKING
 
-import requests
 from django.db.models import Q
 from django.template import Template
 from django.urls import reverse_lazy
@@ -10,10 +9,10 @@ from django.utils.translation import gettext_lazy as _
 from django_rubble.utils.model_helpers import get_model_name
 from django_tables2 import columns, tables
 from easy_thumbnails.files import get_thumbnailer
-from furl import furl
 from iommi import Action, Column, Field, Table, html
 
-from homebin.helpers.views import admin_button_class, get_thumbnail
+from homebin.helpers.components import NavMenu, navbar
+from homebin.helpers.views import CardDefinition, admin_button_class, get_thumbnail
 from homebin.locations import collapsible_widget, linebreaks
 from homebin.locations.models import Container, Location
 
@@ -110,23 +109,6 @@ class ContainersTable(Table):
         rows = Container.objects.all()
 
 
-def get_unsplash_url(base_url: str | furl, client_id: str | None):
-    base_url = furl(base_url) if isinstance(base_url, str) else base_url
-    base_url = base_url / "photos/random/"
-    full_url = base_url.add(
-        query_params={
-            "client_id": client_id,
-            "query": "crate",
-            "fit": "crop",
-            "crop": "entropy",
-            "w": 200,
-            "h": 200,
-        }
-    )
-    response = requests.get(full_url, timeout=10)
-    return response.json()["urls"]["thumb"]
-
-
 def card_linebreaks(request: "HttpRequest", row: "Container", **_):
     content_lines = row.simple_contents.split("\n")
     lines = [format_html("{}<br>", line) for line in content_lines]
@@ -164,42 +146,32 @@ admin_changelist_action = Action.button(
     ),
 )
 
+container_card = CardDefinition(
+    sub_text_field="location", extend_card_classes=["col-sm-12"]
+)
+
 
 class ContainerCardTable(Table):
-    #select = Column.select()
+    menu = navbar
     card = Column(
         cell__value=lambda request, row, **_: html.div(
             html.a(
-                html.div(
-                    html.img(
-                        attrs__src=get_thumbnail(row.primary_thumbnail),
-                        attrs__loading="lazy",
-                        attrs={"width": 200, "height": 200},
-                        attrs__class={"card-img": True},
-                    ),
-                    html.div(
-                        html.h3(row.label, attrs__class__card_title=True),
-                        html.p(row.location, attrs__class__card_text=True),
-                        attrs__class={"card-img-overlay": True},
-                    ),
-                    attrs__class={
-                        "card": True,
-                        "text-center": True,
-                        "text-white": True,
-                        "bg-dark": True,
-                        "col-sm-12": True,
-                    },
-                ),
+                container_card.card(request, instance=row, **_).bind(request=request),
                 attrs__href=row.get_absolute_url(),
             ),
             attrs__style__display="inline-block",
-        ).bind(request=request),
+        ),
     )
     label = Column(filter__include=True, filter__freetext=True, render_column=False)
     container_description = Column(
         filter__include=True, filter__freetext=True, render_column=False
     )
-    simple_contents = Column(filter__include=True,filter__field__required=False,filter__freetext=True,render_column=False)
+    simple_contents = Column(
+        filter__include=True,
+        filter__field__required=False,
+        filter__freetext=True,
+        render_column=False,
+    )
     location = Column.from_model(
         filter__include=True,
         filter__field__required=False,
@@ -207,7 +179,6 @@ class ContainerCardTable(Table):
         model_field_name="location",
         choices=lambda **_: Location.active.active(),
         render_column=False,
-        #bulk__include=True,
     )
 
     class Meta:

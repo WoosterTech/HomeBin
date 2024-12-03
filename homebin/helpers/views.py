@@ -106,25 +106,27 @@ class CardDefinition(BaseModel):
     loading: Literal["lazy", "eager"] = "lazy"
     overlay: bool = True
     card_classes: list[str] = ["text-center", "text-white", "bg-dark"]
+    extend_card_classes: list[str] | None = None
     sub_text_field: str
 
-    def __getattr__(self, name: str):
-        instance_name = name.split("__")[1]
-
-        def card(request: "HttpRequest", **kwargs):
-            instance = kwargs.get(instance_name)
-            if instance is None:
-                return None
-            return html.div(
-                self._image(request, instance),
-                html.div(
-                    html.h3(instance.label, attrs__class__card_title=True),
-                    self._sub_text(request, instance),
-                    attrs__class={"card-img-overlay": self.overlay},
-                ),
-            )
-
-        return card
+    def card(self, request: "HttpRequest", instance: models.Model, **kwargs):
+        card_classes = self.card_classes
+        if self.extend_card_classes is not None:
+            card_classes += self.extend_card_classes
+        return html.div(
+            html.img(
+                attrs__src=get_thumbnail(instance.primary_thumbnail),
+                attrs__loading=self.loading,
+                attrs={"width": self.width, "height": self.height},
+                attrs__class={"card-img": True},
+            ).bind(request=request),
+            html.div(
+                html.h3(instance.label, attrs__class__card_title=True),
+                html.p(instance.location, attrs__class__card_text=True),
+                attrs__class={"card-img-overlay": self.overlay},
+            ).bind(request=request),
+            attrs__class={"card": True, **{key: True for key in card_classes}},
+        ).bind(request=request)
 
     def _image(self, request: "HttpRequest", instance: models.Model, **_):
         return html.img(

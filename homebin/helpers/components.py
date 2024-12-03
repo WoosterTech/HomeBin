@@ -1,7 +1,6 @@
-from iommi import Fragment, Menu, html
+from iommi import Fragment, Menu, MenuItem
 from iommi.declarative.namespace import Namespace
-from iommi.fragment import Fragment
-from iommi.refinable import EvaluatedRefinable, RefinableMembers
+from iommi.refinable import EvaluatedRefinable
 from iommi.shortcut import with_defaults
 
 
@@ -32,3 +31,10 @@ class NavMenu(Menu):
     )
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+
+navbar = Menu(
+    sub_menu={
+        "root": MenuItem(url="/", display_name="Home"),
+    }
+)

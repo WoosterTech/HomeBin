@@ -166,7 +166,7 @@ admin_changelist_action = Action.button(
 
 
 class ContainerCardTable(Table):
-    select = Column.select()
+    #select = Column.select()
     card = Column(
         cell__value=lambda request, row, **_: html.div(
             html.a(
@@ -206,7 +206,7 @@ class ContainerCardTable(Table):
         model_field_name="location",
         choices=lambda **_: Location.active.active(),
         render_column=False,
-        bulk__include=True,
+        #bulk__include=True,
     )
 
     class Meta:

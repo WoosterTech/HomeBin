@@ -5,15 +5,16 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_rubble.models.history_models import HistoryModel
-from django_rubble.models.number_models import NaturalKeyModel
 from django_rubble.utils.strings import Alphabet, truncate_string, uuid_ish
 from easy_thumbnails.files import get_thumbnailer
+
+from homebin.helpers.models import ActiveModel, ItemBaseModel
 
 logger = logging.getLogger(__name__)
 
 
 # Create your models here.
-class Location(HistoryModel, NaturalKeyModel):
+class Location(HistoryModel, ItemBaseModel, ActiveModel):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
     parent_location = models.ForeignKey(
@@ -33,8 +34,7 @@ class Location(HistoryModel, NaturalKeyModel):
         verbose_name_plural = "Locations"
 
     def get_absolute_url(self):
-        logger.debug("get_absolute_url: %s", self.pk)
-        return reverse("location-detail", args=[self.pk])
+        return reverse("location-detail", args=[str(self.pk)])
 
     def breadcrumbs(self) -> list["Location"]:
         breadcrumbs = [self] + (
@@ -57,7 +57,7 @@ def default_container_label():
     return label
 
 
-class Container(HistoryModel, NaturalKeyModel):
+class Container(HistoryModel, ItemBaseModel, ActiveModel):
     label = models.CharField(
         max_length=25, unique=True, default=default_container_label
     )

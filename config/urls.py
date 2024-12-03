@@ -25,6 +25,7 @@ from homebin.assets.views import (
 )
 from homebin.helpers.views import IndexPage
 from homebin.locations.models import Container, Location
+from homebin.locations.tables import ContainerCardTable
 from homebin.locations.views import (
     ContainerQueryPage,
     breadcrumb_test,
@@ -50,7 +51,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
     # path("locations/", include("homebin.locations.urls", namespace="locations")),
-    path("containers/", ContainerListPage().as_view(), name="container-list"),
+    path("containers/", ContainerCardTable().as_view(), name="container-list"),
     path(
         "containers/create/",
         ContainerCreateForm().as_view(),

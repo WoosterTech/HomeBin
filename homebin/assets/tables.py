@@ -1,7 +1,7 @@
-from easy_thumbnails.files import get_thumbnailer
-from iommi import Column, Table, html
+from iommi import Column, Table
 
 from homebin.assets.models import Asset, Manufacturer
+from homebin.helpers.views import ItemImageTable
 
 
 class ManufacturerTable(Table):
@@ -11,23 +11,19 @@ class ManufacturerTable(Table):
         rows = Manufacturer.objects.all()
 
 
-class AssetTable(Table):
-    name = Column(cell__url=lambda row, **_: row.get_absolute_url())
-    make = Column(filter__include=True)
-    model = Column()
-    serial_number = Column()
-    primary_image = Column(
-        cell__value=lambda request, row, **_: (
-            html.img(
-                attrs__src=row.primary_thumbnail["avatar"].url,
-                attrs__loading="lazy",
-                attrs={"width": 100, "height": 100},
-            ).bind(request=request)
-            if row.primary_thumbnail
-            else None
-        ),
-        cell__template="table_thumbnail.html",
+class AssetTable(ItemImageTable):
+    name = Column(filter__include=True, filter__freetext=True, render_column=False)
+    manufacturer = Column.from_model(
+        filter__include=True,
+        filter__freetext=True,
+        render_column=False,
+        model=Asset,
+        model_field_name="make__name",
+    )
+    description = Column(
+        filter__include=True, filter__freetext=True, render_column=False
     )
 
     class Meta:
+        title = "Asset List"
         rows = Asset.objects.all()

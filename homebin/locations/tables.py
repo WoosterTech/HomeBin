@@ -3,22 +3,18 @@ from typing import TYPE_CHECKING
 
 import requests
 from django.db.models import Q
-from django.template import Template
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from django_rubble.utils.model_helpers import get_model_name
 from django_tables2 import columns, tables
-from easy_thumbnails.files import get_thumbnailer
 from furl import furl
 from iommi import Action, Column, Field, Table, html
 
-from homebin.helpers.views import admin_button_class, get_thumbnail
+from homebin.helpers.views import ItemImageTable
 from homebin.locations import collapsible_widget, linebreaks
 from homebin.locations.models import Container, Location
 
 if TYPE_CHECKING:
-    from django.db import models
     from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
@@ -66,10 +62,6 @@ class LocationsTable(Table):
 
     class Meta:
         rows = Location.objects.all()
-
-
-def get_thumbnailer_or_none(image_file):
-    return get_thumbnailer(image_file)["thumbnail"] if image_file else None
 
 
 def simple_contents(row: Container, request: "HttpRequest", **_):
@@ -136,64 +128,16 @@ def card_linebreaks(request: "HttpRequest", row: "Container", **_):
     return html.div(*lines).bind(request=request)
 
 
-def get_model_app(model: "models.Model") -> str:
-    return model._meta.app_label  # noqa: SLF001
-
-
-def get_changelist_url_lazy(model: "models.Model") -> str:
-    return reverse_lazy(
-        f"admin:{get_model_app(model)}_{get_model_name(model)}_changelist"
-    )
-
-
-scan_action = Action.button(
+scan_action = Action(
     display_name="Scan",
     attrs__href=reverse_lazy("container-scan"),
-    attrs__class={"btn": True, "btn-info": True},
-)
-admin_changelist_action = Action.button(
-    display_name="Admin",
-    attrs__href=lambda user, table, **_: (
-        get_changelist_url_lazy(table.rows.model) if user.is_staff else "#"
-    ),
-    attrs__class=admin_button_class,
-    template=lambda user, **_: (
-        Template("<a href='{{href}}' class='{{attrs__class}}'>{{display_name}}</a>")
-        if not user.is_staff
-        else None
-    ),
+    attrs__class={"btn": True, "btn-info": True, "btn-secondary": False},
+    attrs__role="button",
 )
 
 
-class ContainerCardTable(Table):
-    card = Column(
-        cell__value=lambda request, row, **_: html.div(
-            html.a(
-                html.div(
-                    html.img(
-                        attrs__src=get_thumbnail(row.primary_thumbnail),
-                        attrs__loading="lazy",
-                        attrs={"width": 200, "height": 200},
-                        attrs__class={"card-img": True},
-                    ),
-                    html.div(
-                        html.h3(row.label, attrs__class__card_title=True),
-                        html.p(row.location, attrs__class__card_text=True),
-                        attrs__class={"card-img-overlay": True},
-                    ),
-                    attrs__class={
-                        "card": True,
-                        "text-center": True,
-                        "text-white": True,
-                        "bg-dark": True,
-                        "col-sm-12": True,
-                    },
-                ),
-                attrs__href=row.get_absolute_url(),
-            ),
-            attrs__style__display="inline-block",
-        ).bind(request=request),
-    )
+class ContainerCardTable(ItemImageTable):
+    card_label_field = "label"
     label = Column(filter__include=True, filter__freetext=True, render_column=False)
     container_description = Column(
         filter__include=True, filter__freetext=True, render_column=False
@@ -208,15 +152,14 @@ class ContainerCardTable(Table):
         filter__include=True,
         filter__field__required=False,
         model=Container,
-        model_field_name="location",
-        choices=lambda **_: Location.active.active(),
+        model_field_name="location__name",
         render_column=False,
+        filter__freetext=True,
     )
 
     class Meta:
-        rows = Container.objects.all()
-        tag = "div"
-        header__include = False
+        title = "Container List"
+        model = Container
         query__form__fields__show_inactive = Field.boolean(
             initial=False,
             required=False,
@@ -225,10 +168,7 @@ class ContainerCardTable(Table):
         query__form__fields__clear_filters = Action(
             display_name=_("Clear Filters"), attrs__href="?"
         )
-        actions = {
-            "scan": scan_action,
-            "admin": admin_changelist_action,
-        }
+        actions__scan = scan_action
 
         @staticmethod
         def query__filters__show_inactive__value_to_q(value_string_or_f: str, **_):

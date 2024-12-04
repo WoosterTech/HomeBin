@@ -8,7 +8,14 @@ from iommi.path import register_path_decoding
 from homebin.assets.models import Asset, Manufacturer
 from homebin.assets.tables import AssetTable, ManufacturerTable
 from homebin.attachments.models import GenericAttachment
-from homebin.helpers.views import BasePage, item_label_class, item_row, item_row_class
+from homebin.helpers.views import (
+    BasePage,
+    ItemBasePage,
+    item_label_class,
+    item_row,
+    item_row_class,
+    project_thumbnail_aliases,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -44,25 +51,10 @@ def primary_thumbnail_or_none(request, asset: Asset | None, **_):
     ).bind(request=request)
 
 
-class AssetDetailPage(BasePage):
-    title = html.h1(lambda asset, **_: asset.name)
-    actions = html.div(
-        html.a(
-            "List",
-            attrs__href=lambda **_: reverse("asset-list"),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
-        html.a(
-            "Edit (Admin)",
-            attrs__href=lambda asset, **_: reverse(
-                "admin:assets_asset_change", args=[asset.pk]
-            ),
-            attrs__class={"btn": True, "btn-secondary": True},
-        ),
-        attrs__class={"btn-group": True},
-    )
-    # TODO: use a lambda that returns a Fragment?
-    primary_image = html.div(primary_thumbnail_or_none, attrs__class={"mt-3": True})
+asset_detail_preview_alias = alias = project_thumbnail_aliases.THUMBNAIL
+
+
+class AssetDetailPage(ItemBasePage):
     asset = html.div(
         html.ul(
             html.li(
@@ -89,6 +81,10 @@ class AssetDetailPage(BasePage):
             attrs__class={"list-group": True, "mt-3": True},
         )
     )
+
+    class Meta:
+        title = lambda asset, **_: f"{asset.name} | HomeBin"  # noqa: E731
+        model = Asset
 
 
 class AssetAttachmentForm(Form):

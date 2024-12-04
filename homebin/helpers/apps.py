@@ -45,6 +45,10 @@ class HelpersConfig(AppConfig):
                 attrs__src=lambda **_: static("js/iommi.js"),
                 extra={"compress": True},
             ),
+            Actions={
+                "tag": "div",
+                "attrs__class": {"btn-group": True, "links": False, "mb-3": True},
+            },
         )
 
         register_style("my_style", my_style)

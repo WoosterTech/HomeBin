@@ -79,7 +79,7 @@ urlpatterns = [
         LocationDetailPage().as_view(),
         name="location-detail",
     ),
-    path("assets/", AssetListPage().as_view(), name="asset-list"),
+    path("assets/", AssetTable().as_view(), name="asset-list"),
     path(
         "assets/create/", Form.create(auto__model=Asset).as_view(), name="asset-create"
     ),

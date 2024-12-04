@@ -131,6 +131,7 @@ pre-commit = "^4.0.1"
 django-debug-toolbar = "^4.4.6"
 psycopg = { extras = ["binary"], version = "^3.2.3" }
 deptry = "^0.21.1"
+pytz = "^2024.2"  # used by update_build_number
 
 
 [tool.poetry.group.test]
@@ -161,7 +162,8 @@ optional = true
 psycopg = { extras = ["c"], version = "^3.2.3" }
 
 [tool.deptry]
-extend_exclude = [".*/tests/", ".*/conftest.py"]
+extend_exclude = [".*/tests/", ".*/conftest.py", "update_build_number.py"]
+pep621_dev_dependency_groups = ["dev", "test", "docs"]
 
 [tool.deptry.per_rule_ignores]
 DEP004 = ["debug_toolbar"]  # imported in urls when DEBUG is True

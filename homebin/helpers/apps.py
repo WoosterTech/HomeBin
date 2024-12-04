@@ -18,15 +18,13 @@ class HelpersConfig(AppConfig):
         from iommi import Asset, Style, register_style
         from iommi.style import get_global_style
 
-        from homebin import __version__
-
-        from . import get_git_commit_hash
+        from homebin import __build__, __version__
 
         self.project_version = __version__
         self.django_version = get_version()
         self.python_version = sys.version_info
 
-        self.commit_hash = get_git_commit_hash() or "unknown"
+        self.commit_hash = __build__ or "unknown"
 
         bootstrap5 = get_global_style("bootstrap5")
 

@@ -1,6 +1,8 @@
 <footer class="navbar sticky-bottom bg-body-tertiary mt-3 d-print-none">
   <div class="navbar-text col-auto mx-3">Project Version: {{ PROJECT_VERSION }}-{{ COMMIT_HASH }}</div>
-  <div class="navbar-text col-auto mx-3">Django Version: {{ DJANGO_VERSION }}</div>
-  <div class="navbar-text col-auto mx-3">Python Version: {{ PYTHON_VERSION }}</div>
+  {% if user.is_staff %}
+    <div class="navbar-text col-auto mx-3 d-sm-none d-md-block">Django Version: {{ DJANGO_VERSION }}</div>
+    <div class="navbar-text col-auto mx-3 d-sm-none d-md-block">Python Version: {{ PYTHON_VERSION }}</div>
+  {% endif %}
   <div class="navbar-text col-auto ms-auto me-3">{{ COPYRIGHT }}</div>
 </footer>

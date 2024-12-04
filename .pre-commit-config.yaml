@@ -66,6 +66,14 @@ repos:
     - id: poetry-check
     - id: poetry-lock
       args: [--no-update]
+  - repo: local
+    hooks:
+      - id: update-build-number
+        name: Update build number
+        entry: python update_build_number.py
+        language: python
+        stages: [pre-push]
+
 
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:

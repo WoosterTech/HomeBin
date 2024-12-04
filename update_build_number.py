@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 import pytz
+from rich import print as rprint
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ def generate_build_number(time_zone: str = "UTC") -> str:
 
 def update_build_number():
     if not INIT_FILE_PATH.exists():
-        logger.error("Error: %s does not exist.", INIT_FILE_PATH)
+        rprint("[red bold]Error: %s does not exist.[/]", INIT_FILE_PATH)
         return 1
 
     content = INIT_FILE_PATH.read_text()
@@ -52,7 +53,9 @@ def update_build_number():
 
     # Write the updated content back
     INIT_FILE_PATH.write_text(content)
-    logger.info("Updated build number to %s in %s", new_build, INIT_FILE_PATH)
+    rprint(
+        f"[green]Updated build number to {new_build} in [u]{INIT_FILE_PATH}[/]",
+    )
     return 0
 
 

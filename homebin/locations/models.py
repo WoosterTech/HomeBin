@@ -75,6 +75,7 @@ class Container(HistoryModel, ItemBaseModel, ActiveModel):
         blank=True,
     )
     natural_key_fields = ["label"]
+    lookup_field = "label"
 
     attachments_generic = GenericRelation(
         "attachments.GenericAttachment", related_query_name="containers"
@@ -98,5 +99,5 @@ class Container(HistoryModel, ItemBaseModel, ActiveModel):
             f"{self.label} | {truncate_string(self.container_description, num_char=20)}"
         )
 
-    def get_absolute_url(self):
-        return reverse("container-detail", args=[self.label])
+    # def get_absolute_url(self):
+    #     return reverse("container-detail", args=[self.label])

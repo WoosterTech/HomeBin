@@ -10,7 +10,7 @@ from django_tables2 import columns, tables
 from furl import furl
 from iommi import Action, Column, Field, Table, html
 
-from homebin.helpers.views import ItemImageTable
+from homebin.helpers.views import BaseTable, ItemImageTable
 from homebin.locations import collapsible_widget, linebreaks
 from homebin.locations.models import Container, Location
 
@@ -46,7 +46,7 @@ class LocationTable(tables.Table):
         per_page = 10
 
 
-class LocationsTable(Table):
+class LocationsTable(BaseTable):
     name = Column(
         cell__url=lambda row, **_: row.get_absolute_url(),
         filter__include=True,
@@ -61,7 +61,8 @@ class LocationsTable(Table):
     )
 
     class Meta:
-        rows = Location.objects.all()
+        title = "Location List"
+        model = Location
 
 
 def simple_contents(row: Container, request: "HttpRequest", **_):
@@ -164,9 +165,6 @@ class ContainerCardTable(ItemImageTable):
             initial=False,
             required=False,
             display_name=_("Show Inactive"),
-        )
-        query__form__fields__clear_filters = Action(
-            display_name=_("Clear Filters"), attrs__href="?"
         )
         actions__scan = scan_action
 

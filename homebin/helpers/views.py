@@ -2,6 +2,7 @@
 import logging
 from collections.abc import Callable
 from enum import Enum
+from gettext import gettext as _
 from typing import TYPE_CHECKING, Any, Literal, NamedTuple
 
 from django.conf import settings
@@ -40,17 +41,15 @@ class BaseAction(Action):
 
 
 admin_changelist_action = BaseAction(
-    display_name="Admin",
-    attrs__href=lambda user, table, **_: (
-        table.rows.model.objects.admin_changelist_url()
-    ),
+    display_name=_("Admin"),
+    attrs__href=lambda table, **_: (table.rows.model.objects.admin_changelist_url()),
     attrs__class=admin_button_class,
     include=lambda user, **_: user.is_staff,
     after=99,
 )
 
 admin_change_action = BaseAction(
-    display_name="Admin",
+    display_name=_("Admin"),
     attrs__href=lambda page, **kwargs: get_model_instance(page)(
         **kwargs
     ).get_admin_change_url(),
@@ -68,6 +67,19 @@ class ItemBasePage(BasePage):
     model: "type[models.Model]" = SpecialEvaluatedRefinable()
     actions = html.div(
         BaseAction(
+            display_name=_("Edit"),
+            attrs__href=lambda page, **kwargs: reverse(
+                f"{get_model_name(page.model)}-edit",
+                args=[
+                    getattr(get_model_instance(page)(**kwargs), page.model.lookup_field)
+                ],
+            ),
+            attrs__class={"btn": True, "btn-success": True, "btn-secondary": False},
+            include=lambda user, page, **_: user.has_perm(
+                f"{get_model_name(page.model)}.change"
+            ),
+        ),
+        BaseAction(
             display_name="List",
             attrs__href=lambda page, **_: reverse(f"{get_model_name(page.model)}-list"),
             attrs__class={"btn": True, "btn-primary": True, "btn-secondary": False},
@@ -75,6 +87,12 @@ class ItemBasePage(BasePage):
         admin_change_action,
         attrs__class={"btn-group": True},
     )
+
+    class Meta:
+        extra = {"label_field": "name"}
+
+
+class ItemImageBasePage(ItemBasePage):
     primary_image = html.div(
         lambda request, page, **kwargs: (
             html.a(
@@ -117,7 +135,17 @@ class ItemBasePage(BasePage):
                 }
             ),
         }
-        extra = {"label_field": "name"}
+
+
+create_new_action = BaseAction(
+    display_name=_("New"),
+    attrs__href=lambda table, **_: reverse(f"{get_model_name(table.model)}-create"),
+    attrs__class={"btn": True, "btn-success": True, "btn-secondary": False},
+    include=lambda user, table, **_: user.has_perm(
+        f"{get_model_name(table.model)}.add"
+    ),
+    after=-1,
+)
 
 
 class BaseTable(Table):
@@ -126,7 +154,13 @@ class BaseTable(Table):
     class Meta:
         title = "Table"
         parts__h_tag__children = None
+        actions__create_new = create_new_action
         actions__admin = admin_changelist_action
+        query__form__fields__clear_filters = Action(
+            display_name=_("Clear Filters"),
+            attrs__href="?",
+            after=99,
+        )
 
 
 class IndexPage(BasePage):

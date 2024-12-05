@@ -102,6 +102,8 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "crispy_forms",  # used by allauth
     "crispy_bootstrap5",  # used by allauth
+    "data_wizard",
+    "data_wizard.sources",
     "django_cotton",
     "django_rubble",
     "django_tables2",

@@ -5,8 +5,6 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as __
 from iommi import Fragment, html
 
-from homebin.helpers.views import Thumbnail
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, QueryDict
 
@@ -15,9 +13,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 MAX_CONTENT_LINES = 5
-
-
-thumbnail_generator = Thumbnail()
 
 
 # TODO: do this with htmx

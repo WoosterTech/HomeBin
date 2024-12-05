@@ -79,7 +79,7 @@ urlpatterns = [
         LocationDetailPage().as_view(),
         name="location-detail",
     ),
-    path("assets/", AssetListPage().as_view(), name="asset-list"),
+    path("assets/", AssetTable().as_view(), name="asset-list"),
     path(
         "assets/create/", Form.create(auto__model=Asset).as_view(), name="asset-create"
     ),
@@ -93,6 +93,7 @@ urlpatterns = [
     path("attachments/<attachment_pk>/edit/", AssetAttachmentForm().as_view()),
     path("iommi-admin/", include(MyAdmin.urls())),
     path("locations/<int:pk>/breadcrumbs/", breadcrumb_test),
+    path("datawizard/", include("data_wizard.urls")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

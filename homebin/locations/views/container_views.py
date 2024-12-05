@@ -8,12 +8,14 @@ from iommi.form import save_nested_forms
 from homebin.attachments.models import GenericAttachment
 from homebin.helpers.views import (
     BasePage,
+    ItemBasePage,
     admin_button_class,
     item_label_class,
     item_row,
     item_row_class,
+    project_thumbnail_aliases,
 )
-from homebin.locations import linebreaks, thumbnail_generator
+from homebin.locations import linebreaks  # , thumbnail_generator
 from homebin.locations.models import Container
 from homebin.locations.tables import ContainerCardTable
 from homebin.locations.views.all_views import admin_container_change
@@ -47,7 +49,10 @@ class ContainerListPage(BasePage):
     containers_table = ContainerCardTable()
 
 
-class ContainerDetailPage(BasePage):
+container_detail_preview_alias = alias = project_thumbnail_aliases.THUMBNAIL
+
+
+class ContainerDetailPage(ItemBasePage):
     title = html.h1(lambda container, **_: container.label)
     actions = html.div(
         html.a(
@@ -58,12 +63,6 @@ class ContainerDetailPage(BasePage):
         admin_container_change,
         attrs__class={"btn-group": True},
         iommi_style="my_style",
-    )
-    primary_image = html.div(
-        thumbnail_generator.thumbnail_func(
-            "container", "primary_thumbnail", "thumbnail"
-        ),
-        attrs__class={"mt-3": True},
     )
     container = html.div(
         html.ul(
@@ -94,6 +93,11 @@ class ContainerDetailPage(BasePage):
         )
     )
     attachments_title = html.h3("Attachments")
+
+    class Meta:
+        title = lambda container, **_: f"{container.label} | HomeBin"  # noqa: E731
+        model = Container
+        extra = {"label_field": "label"}
 
 
 container_create_form = Form.create(auto__model=Container)

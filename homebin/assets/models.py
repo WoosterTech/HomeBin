@@ -2,7 +2,6 @@ import logging
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 from django_rubble.models.history_models import HistoryModel
 from easy_thumbnails.files import get_thumbnailer
@@ -18,12 +17,10 @@ class Manufacturer(ItemBaseModel):
     name = models.CharField(max_length=100, unique=True)
     natural_key_fields = ["name"]
     slug = AutoSlugField(populate_from="name")
+    lookup_field = "slug"
 
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return reverse("manufacturer-detail", kwargs={"manufacturer_slug": self.slug})
 
 
 class Asset(ItemBaseModel, HistoryModel):
@@ -62,6 +59,3 @@ class Asset(ItemBaseModel, HistoryModel):
 
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return reverse("asset-detail", kwargs={"asset_pk": self.pk})

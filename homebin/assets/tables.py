@@ -1,14 +1,19 @@
-from iommi import Column, Table
+from iommi import Column
 
 from homebin.assets.models import Asset, Manufacturer
-from homebin.helpers.views import ItemImageTable
+from homebin.helpers.views import BaseTable, ItemImageTable
 
 
-class ManufacturerTable(Table):
-    name = Column(cell__url=lambda row, **_: row.get_absolute_url())
+class ManufacturerTable(BaseTable):
+    name = Column(
+        cell__url=lambda row, **_: row.get_absolute_url(),
+        filter__include=True,
+        filter__freetext=True,
+    )
 
     class Meta:
-        rows = Manufacturer.objects.all()
+        title = "Manufacturer List"
+        model = Manufacturer
 
 
 class AssetTable(ItemImageTable):

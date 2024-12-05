@@ -27,8 +27,9 @@ class ItemBaseModel(NaturalKeyModel):
         abstract = True
 
     def get_absolute_url(self):
-        lookup_kwarg = {self.lookup_field: getattr(self, self.lookup_field)}
-        return reverse(f"{self.model_name()}-detail", kwargs=lookup_kwarg)
+        return reverse(
+            f"{self._meta.model_name}-detail", args=[getattr(self, self.lookup_field)]
+        )
 
     def get_admin_change_url(self):
         return reverse(

@@ -137,12 +137,17 @@ class ItemImageBasePage(ItemBasePage):
         }
 
 
+def build_perm_string(model: "models.Model", perm: str) -> str:
+    app_label, model_name = model._meta.app_label, model._meta.model_name  # noqa: SLF001
+    return f"{app_label}.{perm}_{model_name}"
+
+
 create_new_action = BaseAction(
     display_name=_("New"),
     attrs__href=lambda table, **_: reverse(f"{get_model_name(table.model)}-create"),
     attrs__class={"btn": True, "btn-success": True, "btn-secondary": False},
     include=lambda user, table, **_: user.has_perm(
-        f"{get_model_name(table.model)}.add"
+        build_perm_string(table.model, "add")
     ),
     after=-1,
 )

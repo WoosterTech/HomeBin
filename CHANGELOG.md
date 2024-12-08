@@ -1,3 +1,9 @@
+## 0.2.0a14 (2024-12-08)
+
+### Fix
+
+- **view-actions**: fix perms string on "new" action
+
 ## 0.2.0a13 (2024-12-05)
 
 ### Feat

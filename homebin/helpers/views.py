@@ -76,7 +76,7 @@ class ItemBasePage(BasePage):
             ),
             attrs__class={"btn": True, "btn-success": True, "btn-secondary": False},
             include=lambda user, page, **_: user.has_perm(
-                f"{get_model_name(page.model)}.change"
+                build_perm_string(page.model, "change")
             ),
         ),
         BaseAction(

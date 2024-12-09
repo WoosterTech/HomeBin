@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING
 
 from django.http import HttpRequest
 from django.urls import reverse
-from iommi import html
+from iommi import Form, html
 
 from homebin.assets.tables import AssetTable
-from homebin.helpers.views import BasePage
+from homebin.helpers.views import ItemBasePage
 from homebin.locations.models import Location
-from homebin.locations.tables import ContainersTable, LocationsTable
+from homebin.locations.tables import ContainerCardTable, LocationsTable
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def breadcrumbs_link(request: "HttpRequest", location: Location, **kwargs):
-    logger.warning("breadcrumbs_link: %s", location)
+    logger.debug("breadcrumbs_link: %s", location)
     breadcrumbs = reversed(location.breadcrumbs())
     ol_list = [
         html.li(
@@ -43,53 +43,43 @@ def breadcrumbs_link(request: "HttpRequest", location: Location, **kwargs):
     ).bind(request=request)
 
 
-class LocationDetailPage(BasePage):
-    breadcrumbs = html.nav(breadcrumbs_link, attrs__aria_label="breadcrumb")
-    title = html.h1(lambda location, **_: location.name)
+class LocationDetailPage(ItemBasePage):
+    breadcrumbs = html.nav(breadcrumbs_link, attrs__aria_label="breadcrumb", after=-1)
 
-    actions = html.div(
-        html.a(
-            "List",
-            attrs__href=lambda **_: reverse("location-list"),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
-        html.a(
-            "Admin",
-            attrs__href=lambda **_: reverse("admin:locations_location_changelist"),
-            attrs__class={"btn": True, "btn-secondary": True},
-        ),
-        attrs__class={"btn-group": True},
-    )
-
-    sub_locations_table_title = html.h3("Sub Locations")
     sub_locations = LocationsTable(
         rows=lambda location, **_: location.location_set.all(),
+        columns__parent_location__render_column=False,
+        title="Child Locations",
+        actions=None,
+        query__form__include=False,
+        query__advanced__include=False,
+        include=lambda location, **_: location.location_set.exists(),
     )
 
-    table_title = html.h3("Related Containers")
-    related_containers = ContainersTable(
-        rows=lambda location, **_: location.containers.all()
+    related_containers = ContainerCardTable(
+        rows=lambda location, **_: location.containers.all(),
+        title="Containers",
+        actions=None,
+        query__form__include=False,
+        query__advanced__include=False,
+        include=lambda location, **_: location.containers.exists(),
     )
 
-    asset_table_title = html.h3("Related Assets")
     related_assets = AssetTable(
         rows=lambda location, **_: location.asset_set.all(),
+        actions=None,
+        query__form__include=False,
+        title="Assets",
+        query__advanced__include=False,
+        include=lambda location, **_: location.asset_set.exists(),
     )
 
+    class Meta:
+        title = lambda location, **_: location.name  # noqa: E731
+        model = Location
 
-class LocationListPage(BasePage):
-    title = html.h1("Location List")
-    actions = html.div(
-        html.a(
-            "New",
-            attrs__href=lambda **_: reverse("location-create"),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
-        html.a(
-            "Admin",
-            attrs__href=lambda **_: reverse("admin:locations_location_changelist"),
-            attrs__class={"btn": True, "btn-secondary": True},
-        ),
-        attrs__class={"btn-group": True},
-    )
-    locations_table = LocationsTable()
+
+location_edit_form = Form.edit(
+    auto__model=Location,
+    instance=lambda location_pk, **_: Location.objects.get(pk=location_pk),
+)

@@ -1,3 +1,28 @@
+## 0.2.0a14 (2024-12-08)
+
+### Fix
+
+- **view-actions**: fix perms string on "new" action
+
+## 0.2.0a13 (2024-12-05)
+
+### Feat
+
+- **forms**: adds create and edit forms on the front end
+
+## 0.2.0a12 (2024-12-04)
+
+### Feat
+
+- **Detail-Views**: better base views and tables for generating detail and list views, as well as adding a lightbox on detail pages
+- **ContainerCardTable**: much better filtering and displaying of containers
+
+### Fix
+
+- **tables**: merge changes from 'main' and fix deptry (add 'requests' to pyproject.toml)
+- **cleanup**: getting ready to pull changes
+- **ContainerCardTable**: use public url for blank image
+
 ## 0.2.0a11 (2024-12-01)
 
 ### Feat

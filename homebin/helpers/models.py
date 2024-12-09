@@ -1,7 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django_rubble.models.number_models import NaturalKeyModel
+from django_rubble.models.number_models import NaturalKeyModel, NaturalKeyModelManager
+
+
+class ItemBaseManager(NaturalKeyModelManager):
+    def admin_changelist_url(self):
+        return reverse(
+            f"admin:{self.model._meta.app_label}_{self.model._meta.model_name}_changelist"  # noqa: SLF001
+        )
 
 
 # Create your models here.
@@ -14,15 +21,26 @@ class ItemBaseModel(NaturalKeyModel):
 
     lookup_field: str = "pk"
 
+    objects = ItemBaseManager()
+
     class Meta:
         abstract = True
 
     def get_absolute_url(self):
-        lookup_kwarg = {self.lookup_field: getattr(self, self.lookup_field)}
-        return reverse(f"{self.model_name()}-detail", kwargs=lookup_kwarg)
+        return reverse(
+            f"{self._meta.model_name}-detail", args=[getattr(self, self.lookup_field)]
+        )
 
-    def model_name(self):
-        return self._meta.model_name
+    def get_admin_change_url(self):
+        return reverse(
+            f"admin:{self._meta.app_label}_{self._meta.model_name}_change",
+            args=[self.pk],
+        )
+
+    def get_admin_changelist_url(self):
+        return reverse(
+            f"admin:{self._meta.app_label}_{self._meta.model_name}_changelist"
+        )
 
 
 class ActiveManager(models.Manager):

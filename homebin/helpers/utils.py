@@ -1,6 +1,9 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django_rubble.utils.numbers import is_number
+
+if TYPE_CHECKING:
+    from django.db import models
 
 
 def is_truthy(value: Any) -> bool:
@@ -13,3 +16,7 @@ def is_truthy(value: Any) -> bool:
 
     msg = f"Can't determine truthiness of {value}"
     raise ValueError(msg)
+
+
+def get_app_label(model: "models.Model") -> str:
+    return model._meta.app_label  # noqa: SLF001

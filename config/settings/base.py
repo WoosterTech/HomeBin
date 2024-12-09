@@ -102,6 +102,8 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "crispy_forms",  # used by allauth
     "crispy_bootstrap5",  # used by allauth
+    "data_wizard",
+    "data_wizard.sources",
     "django_cotton",
     "django_rubble",
     "django_tables2",
@@ -176,6 +178,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "iommi.sql_trace.Middleware",

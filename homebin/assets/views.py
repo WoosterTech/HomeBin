@@ -1,38 +1,27 @@
 # Create your views here.
 import logging
 
-from django.urls import reverse
-from iommi import Field, Form, Page, html
+from iommi import Column, Field, Form, html
 from iommi.path import register_path_decoding
 
 from homebin.assets.models import Asset, Manufacturer
-from homebin.assets.tables import AssetTable, ManufacturerTable
+from homebin.assets.tables import AssetTable
 from homebin.attachments.models import GenericAttachment
-from homebin.helpers.views import BasePage, item_label_class, item_row, item_row_class
+from homebin.helpers.views import (
+    BaseTable,
+    ItemBasePage,
+    ItemImageBasePage,
+    item_label_class,
+    item_row,
+    item_row_class,
+    project_thumbnail_aliases,
+)
 
 logger = logging.getLogger(__name__)
 
 register_path_decoding(
     manufacturer_slug=Manufacturer.slug, asset_pk=Asset, attachment_pk=GenericAttachment
 )
-
-
-class AssetListPage(BasePage):
-    title = html.h1("Asset List")
-    actions = html.div(
-        html.a(
-            "New",
-            attrs__href=lambda **_: reverse("asset-create"),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
-        html.a(
-            "Admin",
-            attrs__href=lambda **_: reverse("admin:assets_asset_changelist"),
-            attrs__class={"btn": True, "btn-secondary": True},
-        ),
-        attrs__class={"btn-group": True},
-    )
-    assets_table = AssetTable()
 
 
 def primary_thumbnail_or_none(request, asset: Asset | None, **_):
@@ -44,25 +33,10 @@ def primary_thumbnail_or_none(request, asset: Asset | None, **_):
     ).bind(request=request)
 
 
-class AssetDetailPage(BasePage):
-    title = html.h1(lambda asset, **_: asset.name)
-    actions = html.div(
-        html.a(
-            "List",
-            attrs__href=lambda **_: reverse("asset-list"),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
-        html.a(
-            "Edit (Admin)",
-            attrs__href=lambda asset, **_: reverse(
-                "admin:assets_asset_change", args=[asset.pk]
-            ),
-            attrs__class={"btn": True, "btn-secondary": True},
-        ),
-        attrs__class={"btn-group": True},
-    )
-    # TODO: use a lambda that returns a Fragment?
-    primary_image = html.div(primary_thumbnail_or_none, attrs__class={"mt-3": True})
+asset_detail_preview_alias = alias = project_thumbnail_aliases.THUMBNAIL
+
+
+class AssetDetailPage(ItemImageBasePage):
     asset = html.div(
         html.ul(
             html.li(
@@ -86,9 +60,43 @@ class AssetDetailPage(BasePage):
                 ),
                 attrs__class=item_row_class,
             ),
+            html.li(
+                BaseTable(
+                    rows=lambda asset, **_: asset.attachments.all(),
+                    columns__name=Column.from_model(
+                        model=GenericAttachment,
+                        model_field_name="name",
+                        cell__url=lambda row, **_: row.file.url,
+                    ),
+                    columns__attachment_type=Column(
+                        filter__include=True,
+                        cell__value=lambda row, **_: row.attachment_type.title(),
+                    ),
+                    title="Attachments",
+                    # query__form__include=False,
+                    actions=None,
+                ),
+                attrs__class=item_row_class,
+                include=lambda asset, **_: asset.attachments.exists(),
+            ),
             attrs__class={"list-group": True, "mt-3": True},
         )
     )
+
+    class Meta:
+        title = lambda asset, **_: f"{asset.name}"  # noqa: E731
+        model = Asset
+
+
+asset_edit_form = Form.edit(
+    auto__model=Asset,
+    instance=lambda asset_pk, **_: Asset.objects.get(pk=asset_pk),
+)
+
+asset_delete_form = Form.delete(
+    auto__model=Asset,
+    instance=lambda asset_pk, **_: Asset.objects.get(pk=asset_pk),
+)
 
 
 class AssetAttachmentForm(Form):
@@ -103,37 +111,21 @@ class AssetAttachmentForm(Form):
         )
 
 
-class ManufacturerListPage(BasePage):
-    title = html.h1("Manufacturer List")
-    actions = html.div(
-        html.a(
-            "New (Admin)",
-            attrs__href=lambda **_: reverse("admin:assets_manufacturer_add"),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
-        attrs__class={"btn-group": True},
-    )
-    assets_table = ManufacturerTable()
-
-
-class ManufacturerDetailPage(Page):
-    title = html.h1(lambda manufacturer, **_: manufacturer.name)
-    actions = html.div(
-        html.a(
-            "List",
-            attrs__href=lambda **_: reverse("manufacturer-list"),
-            attrs__class={"btn": True, "btn-primary": True},
-        ),
-        html.a(
-            "Edit (Admin)",
-            attrs__href=lambda manufacturer, **_: reverse(
-                "admin:assets_manufacturer_change", args=[manufacturer.pk]
-            ),
-            attrs__class={"btn": True, "btn-secondary": True},
-        ),
-        attrs__class={"btn-group": True},
-    )
+class ManufacturerDetailPage(ItemBasePage):
     table_title = html.h3("Related Assets")
     related_assets = AssetTable(
         rows=lambda manufacturer, **_: manufacturer.asset_set.all(),
+        actions=None,
     )
+
+    class Meta:
+        model = Manufacturer
+
+
+manufacturer_edit_form = Form.edit(
+    auto__model=Manufacturer,
+    instance=lambda manufacturer_slug, **_: Manufacturer.objects.get(
+        slug=manufacturer_slug
+    ),
+    fields__slug__include=False,
+)

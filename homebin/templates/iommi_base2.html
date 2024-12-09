@@ -7,7 +7,7 @@
   <head>
     <title>
       {% block title %}
-        {{ title }}
+        {{ title }} | HomeBin
       {% endblock title %}
     </title>
     {% block iommi_head_contents %}
@@ -15,16 +15,16 @@
     {% for asset in assets.values %}
       {% if not asset.in_body and not asset.extra.compress %}{{ asset }}{% endif %}
     {% endfor %}
-    {% compress js %}
-      {% for asset in assets.values %}
-        {% if asset.extra.compress and asset.tag == "script" %}{{ asset }}{% endif %}
-      {% endfor %}
-    {% endcompress %}
-    {% compress css %}
-      {% for asset in assets.values %}
-        {% if asset.extra.compress and asset.tag == "link" %}{{ asset }}{% endif %}
-      {% endfor %}
-    {% endcompress %}
+    {% comment %} {% compress js %} {% endcomment %}
+    {% for asset in assets.values %}
+      {% if asset.extra.compress and asset.tag == "script" %}{{ asset }}{% endif %}
+    {% endfor %}
+    {% comment %} {% endcompress %} {% endcomment %}
+    {% comment %} {% compress css %} {% endcomment %}
+    {% for asset in assets.values %}
+      {% if asset.extra.compress and asset.tag == "link" %}{{ asset }}{% endif %}
+    {% endfor %}
+    {% comment %} {% endcompress %} {% endcomment %}
     {% block iommi_head_contents_last %}
     {% endblock iommi_head_contents_last %}
   </head>

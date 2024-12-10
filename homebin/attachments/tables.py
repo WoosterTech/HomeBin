@@ -30,6 +30,6 @@ class AttachmentImageTable(BaseTable):
         tag = "div"
         header__include = False
         title = "Images"
-        actions = BaseAction(
-            display_name="Add",
-        )
+        #actions = BaseAction(
+        #    display_name="Add",
+        #)

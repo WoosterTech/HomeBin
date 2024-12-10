@@ -31,4 +31,5 @@ class AssetTable(ItemImageTable):
 
     class Meta:
         title = "Asset List"
-        rows = Asset.objects.all()
+        model = Asset
+        extra = {"url_namespace": "assets"}

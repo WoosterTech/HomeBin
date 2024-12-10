@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 from django_rubble.models.history_models import HistoryModel
 from easy_thumbnails.files import get_thumbnailer
@@ -59,3 +60,6 @@ class Asset(ItemBaseModel, HistoryModel):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("assets:asset-detail", args=[self.pk])

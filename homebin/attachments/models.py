@@ -5,6 +5,15 @@ from django_rubble.utils.default_funcs import django_today
 from typeid import TypeID
 
 
+class AttachmentManager(models.Manager):
+    def images(self, *, not_images=False):
+        return (
+            self.filter(attachment_type="image")
+            if not not_images
+            else self.exclude(attachment_type="image")
+        )
+
+
 # Create your models here.
 def attachment_upload_to(instance: "GenericAttachment", filename: str):
     file_extension = filename.split(".")[-1]
@@ -32,6 +41,8 @@ class GenericAttachment(models.Model):
         max_length=10, choices=TYPE_CHOICES, default="image"
     )
     sort_rank = models.PositiveIntegerField(default=0, db_index=True)
+
+    objects = AttachmentManager()
 
     class Meta:
         indexes = [

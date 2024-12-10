@@ -6,23 +6,19 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-
-# from iommi import Form
-from iommi import Form
 from rest_framework.authtoken.views import obtain_auth_token
 
 from homebin.assets.admin import MyAdmin
-from homebin.assets.models import Asset, Manufacturer
-from homebin.assets.tables import AssetTable, ManufacturerTable
+from homebin.assets.tables import ManufacturerTable
 from homebin.assets.views import (
     AssetAttachmentForm,
-    AssetDetailPage,
     ManufacturerDetailPage,
-    asset_edit_form,
+    manufacturer_create_form,
+    manufacturer_delete_form,
     manufacturer_edit_form,
 )
+from homebin.attachments.forms import attachment_forms
 from homebin.helpers.views import IndexPage
-from homebin.locations.models import Container, Location
 from homebin.locations.tables import ContainerCardTable, LocationsTable
 from homebin.locations.views import (
     ContainerDetailPage,
@@ -30,12 +26,11 @@ from homebin.locations.views import (
     LocationDetailPage,
     breadcrumb_test,
 )
-from homebin.locations.views.container_views import container_edit_form
-from homebin.locations.views.location_views import location_edit_form
+from homebin.locations.views.container_views import container_forms
+from homebin.locations.views.location_views import location_forms
 
 # fmt: off
 urlpatterns = [
-    # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path("", IndexPage().as_view(), name="home"),
     path( "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     # Django Admin, use {% url 'admin:index' %}
@@ -43,23 +38,22 @@ urlpatterns = [
     # User management
     path("users/", include("homebin.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
-    # path("locations/", include("homebin.locations.urls", namespace="locations")),
     path("containers/", ContainerCardTable().as_view(), name="container-list"),
-    path("containers/create/", Form.create(auto__model=Container).as_view(), name="container-create"),
+    path("containers/create/", container_forms.create.as_view(), name="container-create"),
     path("containers/find/", ContainerQueryPage().as_view(), name="container-scan"),
-    path("containers/<container_label>/edit/", container_edit_form.as_view(), name="container-edit"),
+    path("containers/<container_label>/edit/", container_forms.edit.as_view(), name="container-edit"),
+    path("containers/<container_label>/delete/", container_forms.delete.as_view(), name="container-delete"),
+    path("containers/<container_label>/attachments/add/", attachment_forms.create.as_view(), name="container-add-attachment"),
     path("containers/<container_label>/", ContainerDetailPage().as_view(), name="container-detail"),
     path("locations/", LocationsTable().as_view(), name="location-list"),
-    path("locations/create/", Form.create(auto__model=Location).as_view(), name="location-create"),
-    path("locations/<location_pk>/edit/", location_edit_form.as_view(), name="location-edit"),
+    path("locations/create/", location_forms.create.as_view(), name="location-create"),
+    path("locations/<location_pk>/edit/", location_forms.edit.as_view(), name="location-edit"),
+    path("locations/<location_pk>/delete/", location_forms.delete.as_view(), name="location-delete"),
     path("locations/<location_pk>/", LocationDetailPage().as_view(),name="location-detail"),
-    path("assets/", AssetTable().as_view(), name="asset-list"),
-    path("assets/create/", Form.create(auto__model=Asset).as_view(), name="asset-create"),
-    path("assets/<asset_pk>/edit/", asset_edit_form.as_view(), name="asset-edit"),
-    path("assets/<asset_pk>/", AssetDetailPage().as_view(), name="asset-detail"),
+    path("assets/", include("homebin.assets.urls")),
     path("manufacturers/", ManufacturerTable().as_view(), name="manufacturer-list"),
-    path("manufacturers/create/", Form.create(auto__model=Manufacturer).as_view(), name="manufacturer-create"),
+    path("manufacturers/create/", manufacturer_create_form.as_view(), name="manufacturer-create"),
+    path("manufacturers/<manufacturer_slug>/delete/", manufacturer_delete_form.as_view(), name="manufacturer-delete"),
     path("manufacturers/<manufacturer_slug>/edit/", manufacturer_edit_form.as_view(), name="manufacturer-edit"),
     path("manufacturers/<manufacturer_slug>/", ManufacturerDetailPage().as_view(), name="manufacturer-detail"),
     path("attachments/<attachment_pk>/edit/", AssetAttachmentForm().as_view()),
@@ -108,5 +102,5 @@ if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
-        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls)), *urlpatterns]
 # fmt: on

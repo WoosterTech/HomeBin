@@ -6,7 +6,7 @@ from gettext import gettext as _
 from typing import TYPE_CHECKING, Any, Literal, NamedTuple
 
 from django.conf import settings
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django_rubble.utils.model_helpers import get_model_name
 from furl import furl
 from iommi import Action, Asset, Column, Fragment, Page, Table, html
@@ -63,17 +63,55 @@ def get_model_instance(page):
     return lambda **kwargs: kwargs.get(model_name)
 
 
+def model_url(
+    root_fragment: "ItemBasePage | Table",
+    *,
+    view: str,
+    lookup_required: bool = False,
+    **kwargs,
+):
+    model_name = get_model_name(root_fragment.model)
+    lookup_field = root_fragment.model.lookup_field
+    url_namespace = root_fragment.extra["url_namespace"]
+    reverse_string = f"{model_name}-{view}"
+    if url_namespace is not None:
+        reverse_string = f"{url_namespace}:{reverse_string}"
+    args = (
+        [getattr(get_model_instance(root_fragment)(**kwargs), lookup_field)]
+        if lookup_required
+        else []
+    )
+    return reverse_lazy(reverse_string, args=args)
+
+
+def page_get_model_url(
+    page: "ItemBasePage", *, view: str, lookup_required: bool = False, **kwargs
+):
+    return model_url(page, view=view, lookup_required=lookup_required, **kwargs)
+
+
+def get_list_url(page: "ItemBasePage", **kwargs):
+    return page_get_model_url(page=page, view="list", lookup_required=False, **kwargs)
+
+
+def get_create_url(page: "ItemBasePage", **kwargs):
+    return page_get_model_url(page=page, view="create", lookup_required=False, **kwargs)
+
+
+def get_update_url(page: "ItemBasePage", **kwargs):
+    return page_get_model_url(page=page, view="edit", lookup_required=True, **kwargs)
+
+
+def get_delete_url(page: "ItemBasePage", **kwargs):
+    return page_get_model_url(page=page, view="delete", lookup_required=True, **kwargs)
+
+
 class ItemBasePage(BasePage):
     model: "type[models.Model]" = SpecialEvaluatedRefinable()
     actions = html.div(
         BaseAction(
             display_name=_("Edit"),
-            attrs__href=lambda page, **kwargs: reverse(
-                f"{get_model_name(page.model)}-edit",
-                args=[
-                    getattr(get_model_instance(page)(**kwargs), page.model.lookup_field)
-                ],
-            ),
+            attrs__href=get_update_url,
             attrs__class={"btn": True, "btn-success": True, "btn-secondary": False},
             include=lambda user, page, **_: user.has_perm(
                 build_perm_string(page.model, "change")
@@ -81,15 +119,23 @@ class ItemBasePage(BasePage):
         ),
         BaseAction(
             display_name="List",
-            attrs__href=lambda page, **_: reverse(f"{get_model_name(page.model)}-list"),
+            attrs__href=get_list_url,
             attrs__class={"btn": True, "btn-primary": True, "btn-secondary": False},
+        ),
+        BaseAction(
+            display_name="Delete",
+            attrs__href=get_delete_url,
+            attrs__class={"btn": True, "btn-danger": True, "btn-secondary": False},
+            include=lambda user, page, **_: user.has_perm(
+                build_perm_string(page.model, "delete")
+            ),
         ),
         admin_change_action,
         attrs__class={"btn-group": True},
     )
 
     class Meta:
-        extra = {"label_field": "name"}
+        extra = {"label_field": "name", "url_namespace": None}
 
 
 class ItemImageBasePage(ItemBasePage):
@@ -138,13 +184,34 @@ class ItemImageBasePage(ItemBasePage):
 
 
 def build_perm_string(model: "models.Model", perm: str) -> str:
-    app_label, model_name = model._meta.app_label, model._meta.model_name  # noqa: SLF001
+    app_label, model_name = (
+        model._meta.app_label,  # noqa: SLF001
+        model._meta.model_name,  # noqa: SLF001
+    )
     return f"{app_label}.{perm}_{model_name}"
+
+
+def table_get_model_url(
+    *, table: "Table", view: str, lookup_required: bool = False, **kwargs
+):
+    return model_url(table, view=view, lookup_required=lookup_required, **kwargs)
+
+
+def get_table_list_url(table: "Table", **kwargs):
+    return table_get_model_url(
+        table=table, view="list", lookup_required=False, **kwargs
+    )
+
+
+def get_table_create_url(table: "Table", **kwargs):
+    return table_get_model_url(
+        table=table, view="create", lookup_required=False, **kwargs
+    )
 
 
 create_new_action = BaseAction(
     display_name=_("New"),
-    attrs__href=lambda table, **_: reverse(f"{get_model_name(table.model)}-create"),
+    attrs__href=get_table_create_url,
     attrs__class={"btn": True, "btn-success": True, "btn-secondary": False},
     include=lambda user, table, **_: user.has_perm(
         build_perm_string(table.model, "add")
@@ -158,6 +225,7 @@ class BaseTable(Table):
 
     class Meta:
         title = "Table"
+        extra = {"url_namespace": None}
         parts__h_tag__children = None
         actions__create_new = create_new_action
         actions__admin = admin_changelist_action
@@ -171,9 +239,46 @@ class BaseTable(Table):
 class IndexPage(BasePage):
     content = html.p("Welcome to HomeBin!")
 
+    asset_app_card = html.div(
+        html.h2("Assets"),
+        html.p("View and manage assets."),
+        html.div(
+            html.a(
+                "View Assets",
+                attrs__href=reverse_lazy("assets:asset-list"),
+                attrs__class={"btn": True, "btn-primary": True},
+            ),
+            html.a(
+                "View Manufacturers",
+                attrs__href=reverse_lazy("manufacturer-list"),
+                attrs__class={"btn": True, "btn-primary": True},
+            ),
+            attrs__class={"btn-group": True},
+        ),
+        attrs__class={"card": True, "text-center": True, "col-3": True},
+    )
+    containers_app_card = html.div(
+        html.h2("Containers"),
+        html.p("View and manage containers and locations."),
+        html.div(
+            html.a(
+                "View Containers",
+                attrs__href=reverse_lazy("container-list"),
+                attrs__class={"btn": True, "btn-primary": True},
+            ),
+            html.a(
+                "View Locations",
+                attrs__href=reverse_lazy("location-list"),
+                attrs__class={"btn": True, "btn-primary": True},
+            ),
+            attrs__class={"btn-group": True},
+        ),
+        attrs__class={"card": True, "text-center": True, "col-3": True},
+    )
+
 
 thumbnail_aliases = settings.THUMBNAIL_ALIASES[""]
-empty_thumbnail_url = furl("https://placehold.co/200x200/grey/white/svg?text=empty")
+empty_thumbnail_url = furl("https://placehold.co/200x200/grey/white/svg?text=no+image")
 
 
 class ImgSize(NamedTuple):

@@ -7,6 +7,8 @@ from iommi.path import register_path_decoding
 from homebin.assets.models import Asset, Manufacturer
 from homebin.assets.tables import AssetTable
 from homebin.attachments.models import GenericAttachment
+from homebin.attachments.tables import AttachmentImageTable
+from homebin.helpers.forms import BaseForm
 from homebin.helpers.views import (
     BaseTable,
     ItemBasePage,
@@ -61,8 +63,14 @@ class AssetDetailPage(ItemImageBasePage):
                 attrs__class=item_row_class,
             ),
             html.li(
+                lambda request, asset, **_: AttachmentImageTable(
+                    rows=asset.attachments.filter(attachment_type="image")
+                ).bind(request=request),
+                attrs__class=item_row_class,
+            ),
+            html.li(
                 BaseTable(
-                    rows=lambda asset, **_: asset.attachments.all(),
+                    rows=lambda asset, **_: asset.attachments.images(not_images=True),
                     columns__name=Column.from_model(
                         model=GenericAttachment,
                         model_field_name="name",
@@ -73,11 +81,12 @@ class AssetDetailPage(ItemImageBasePage):
                         cell__value=lambda row, **_: row.attachment_type.title(),
                     ),
                     title="Attachments",
-                    # query__form__include=False,
                     actions=None,
                 ),
                 attrs__class=item_row_class,
-                include=lambda asset, **_: asset.attachments.exists(),
+                include=lambda asset, **_: asset.attachments.images(
+                    not_images=True
+                ).exists(),
             ),
             attrs__class={"list-group": True, "mt-3": True},
         )
@@ -86,16 +95,23 @@ class AssetDetailPage(ItemImageBasePage):
     class Meta:
         title = lambda asset, **_: f"{asset.name}"  # noqa: E731
         model = Asset
+        extra = {"url_namespace": "assets"}
 
 
-asset_edit_form = Form.edit(
-    auto__model=Asset,
-    instance=lambda asset_pk, **_: Asset.objects.get(pk=asset_pk),
+class AssetForm(BaseForm):
+    class Meta:
+        auto__model = Asset
+
+
+asset_create_form = AssetForm.create()
+
+
+asset_edit_form = AssetForm.edit(
+    instance=lambda asset_pk, **_: Asset.objects.get(pk=asset_pk)
 )
 
-asset_delete_form = Form.delete(
-    auto__model=Asset,
-    instance=lambda asset_pk, **_: Asset.objects.get(pk=asset_pk),
+asset_delete_form = AssetForm.delete(
+    instance=lambda asset_pk, **_: Asset.objects.get(pk=asset_pk)
 )
 
 
@@ -122,10 +138,23 @@ class ManufacturerDetailPage(ItemBasePage):
         model = Manufacturer
 
 
-manufacturer_edit_form = Form.edit(
-    auto__model=Manufacturer,
+class ManufacturerForm(Form):
+    class Meta:
+        auto__model = Manufacturer
+        fields__slug__include = False
+
+
+manufacturer_create_form = ManufacturerForm.create()
+
+
+manufacturer_edit_form = ManufacturerForm.edit(
     instance=lambda manufacturer_slug, **_: Manufacturer.objects.get(
         slug=manufacturer_slug
-    ),
-    fields__slug__include=False,
+    )
+)
+
+manufacturer_delete_form = ManufacturerForm.delete(
+    instance=lambda manufacturer_slug, **_: Manufacturer.objects.get(
+        slug=manufacturer_slug
+    )
 )

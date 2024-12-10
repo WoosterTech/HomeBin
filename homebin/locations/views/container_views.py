@@ -1,6 +1,8 @@
 from iommi import Column, EditTable, Form, html
 
 from homebin.attachments.models import GenericAttachment
+from homebin.attachments.tables import AttachmentImageTable
+from homebin.helpers.forms import BaseForm
 from homebin.helpers.views import (
     BaseTable,
     ItemImageBasePage,
@@ -40,8 +42,16 @@ class ContainerDetailPage(ItemImageBasePage):
                 attrs__class=item_row_class,
             ),
             html.li(
+                lambda request, container, **_: AttachmentImageTable(
+                    rows=container.attachments_generic.images()
+                ).bind(request=request),
+                attrs__class=item_row_class,
+            ),
+            html.li(
                 BaseTable(
-                    rows=lambda container, **_: container.attachments_generic.all(),
+                    rows=lambda container, **_: (
+                        container.attachments_generic.images(not_images=True)
+                    ),
                     columns__name=Column.from_model(
                         model=GenericAttachment,
                         model_field_name="name",
@@ -52,11 +62,12 @@ class ContainerDetailPage(ItemImageBasePage):
                         cell__value=lambda row, **_: row.attachment_type.title(),
                     ),
                     title="Attachments",
-                    # query__form__include=False,
                     actions=None,
                 ),
                 attrs__class=item_row_class,
-                include=lambda container, **_: container.attachments_generic.exists(),
+                include=lambda container, **_: (
+                    container.attachments_generic.images(not_images=True).exists()
+                ),
             ),
             attrs__class={"list-group": True, "mt-3": True},
         )
@@ -75,11 +86,9 @@ attachment_create_edit_table = EditTable(
 )
 
 
-class ContainerCreateForm(Form):
-    edit_container = Form.create(auto__model=Container)
+class ContainerForm(BaseForm):
+    class Meta:
+        auto__model = Container
 
 
-container_edit_form = Form.edit(
-    auto__model=Container,
-    instance=lambda container_label, **_: Container.objects.get(label=container_label),
-)
+container_forms = ContainerForm.crud_form_factory()

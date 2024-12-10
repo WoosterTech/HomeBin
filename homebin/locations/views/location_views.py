@@ -6,6 +6,7 @@ from django.urls import reverse
 from iommi import Form, html
 
 from homebin.assets.tables import AssetTable
+from homebin.helpers.forms import BaseForm
 from homebin.helpers.views import ItemBasePage
 from homebin.locations.models import Location
 from homebin.locations.tables import ContainerCardTable, LocationsTable
@@ -83,3 +84,11 @@ location_edit_form = Form.edit(
     auto__model=Location,
     instance=lambda location_pk, **_: Location.objects.get(pk=location_pk),
 )
+
+
+class LocationForm(BaseForm):
+    class Meta:
+        auto__model = Location
+
+
+location_forms = LocationForm.crud_form_factory()

@@ -1,7 +1,7 @@
 from easy_thumbnails.files import get_thumbnailer
 from iommi import Column, html
 
-from homebin.helpers.views import BaseAction, BaseTable, project_thumbnail_aliases
+from homebin.helpers.views import BaseTable, project_thumbnail_aliases
 
 alias = project_thumbnail_aliases.THUMBNAIL
 
@@ -30,6 +30,4 @@ class AttachmentImageTable(BaseTable):
         tag = "div"
         header__include = False
         title = "Images"
-        #actions = BaseAction(
-        #    display_name="Add",
-        #)
+        actions = {"create_new__include": False, "admin__include": False}

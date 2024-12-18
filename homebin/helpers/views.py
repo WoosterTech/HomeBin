@@ -4,7 +4,7 @@ import sys
 from collections.abc import Callable
 from enum import Enum
 from gettext import gettext as _
-from typing import TYPE_CHECKING, Any, Literal, NamedTuple, override
+from typing import TYPE_CHECKING, Any, Literal, NamedTuple
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_not_required

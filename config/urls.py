@@ -4,7 +4,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
-from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
@@ -18,7 +17,7 @@ from homebin.assets.views import (
     manufacturer_edit_form,
 )
 from homebin.attachments.forms import attachment_forms
-from homebin.helpers.views import IndexPage
+from homebin.helpers.views import AboutPage, IndexPage
 from homebin.locations.tables import ContainerCardTable, LocationsTable
 from homebin.locations.views import (
     ContainerDetailPage,
@@ -32,7 +31,7 @@ from homebin.locations.views.location_views import location_forms
 # fmt: off
 urlpatterns = [
     path("", IndexPage().as_view(), name="home"),
-    path( "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
+    path( "about/", AboutPage().as_view(), name="about"),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

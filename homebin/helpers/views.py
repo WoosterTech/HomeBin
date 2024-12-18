@@ -3,9 +3,10 @@ import logging
 from collections.abc import Callable
 from enum import Enum
 from gettext import gettext as _
-from typing import TYPE_CHECKING, Any, Literal, NamedTuple
+from typing import TYPE_CHECKING, Any, Literal, NamedTuple, override
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_not_required
 from django.urls import reverse_lazy
 from django_rubble.utils.model_helpers import get_model_name
 from furl import furl
@@ -236,7 +237,13 @@ class BaseTable(Table):
         )
 
 
-class IndexPage(BasePage):
+class LoginNotRequiredBasePage(BasePage):
+    @override
+    def as_view(self, **kwargs):
+        return login_not_required(super().as_view(**kwargs))
+
+
+class IndexPage(LoginNotRequiredBasePage):
     content = html.p("Welcome to HomeBin!")
 
     asset_app_card = html.div(
@@ -275,6 +282,10 @@ class IndexPage(BasePage):
         ),
         attrs__class={"card": True, "text-center": True, "col-3": True},
     )
+
+
+class AboutPage(LoginNotRequiredBasePage):
+    title = html.h2("This is a pet project for keeping track of home inventory.")
 
 
 thumbnail_aliases = settings.THUMBNAIL_ALIASES[""]

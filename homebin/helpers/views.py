@@ -1,5 +1,6 @@
 # Create your views here.
 import logging
+import sys
 from collections.abc import Callable
 from enum import Enum
 from gettext import gettext as _
@@ -13,6 +14,11 @@ from furl import furl
 from iommi import Action, Asset, Column, Fragment, Page, Table, html
 from iommi.refinable import SpecialEvaluatedRefinable
 from pydantic import BaseModel
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 if TYPE_CHECKING:
     from django.db import models

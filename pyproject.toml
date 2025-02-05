@@ -128,7 +128,7 @@ djlint = "^1.36.4"
 pre-commit = "^4.1.0"
 # Django
 # -----------------------------------------------------------
-django-debug-toolbar = "^4.4.6"
+django-debug-toolbar = "^5.0.0"
 psycopg = { extras = ["binary"], version = "^3.2.3" }
 deptry = "^0.23.0"
 pytz = "^2024.2"  # used by update_build_number

@@ -86,7 +86,7 @@ pillow = "^11.0.0"
 argon2-cffi = "^23.1.0"
 whitenoise = "^6.7.0"
 redis = "^5.1.1"
-loguru = "^0.7.2"
+loguru = "^0.7.3"
 pydantic = "^2.9.2"
 typeid-python = "^0.3.1"
 django-rubble = { git = "https://github.com/WoosterTech/django-rubble.git", extras = [

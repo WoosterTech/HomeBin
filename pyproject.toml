@@ -70,13 +70,13 @@ django = "^5.0.9"
 gunicorn = { version = "^23.0.0", platform = "linux" }
 # base
 # -----------------------------------------------------------
-django-environ = "^0.11.2"
+django-environ = "^0.12.0"
 django-allauth = { version = "^65.2.0", extras = ["mfa"] }
 django-compressor = "^4.5.1"
 django-redis = "^5.4.0"
 djangorestframework = "^3.12.2"
 django-cors-headers = "^4.5.0"
-drf-spectacular = "^0.27.2"
+drf-spectacular = "^0.28.0"
 sentry-sdk = "^2.16.0"
 hiredis = "^3.0.0"
 django-storages = { extras = ["s3"], version = "^1.14.4" }
@@ -122,16 +122,17 @@ ipdb = "^0.13.13"
 # -----------------------------------------------------------
 mypy = "^1.11.2"
 django-stubs = { extras = ["compatible-mypy"], version = "^5.1.0" }
-djangorestframework-stubs = "^3.15.1"
-ruff = "^0.8.1"
-djlint = "^1.35.2"
-pre-commit = "^4.0.1"
+djangorestframework-stubs = "^3.15.2"
+ruff = "^0.9.4"
+djlint = "^1.36.4"
+pre-commit = "^4.1.0"
 # Django
 # -----------------------------------------------------------
 django-debug-toolbar = "^4.4.6"
 psycopg = { extras = ["binary"], version = "^3.2.3" }
-deptry = "^0.21.1"
+deptry = "^0.23.0"
 pytz = "^2024.2"  # used by update_build_number
+factory-boy = "^3.3.3"
 
 
 [tool.poetry.group.test]
@@ -139,7 +140,7 @@ optional = true
 
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.3.3"
+pytest = "^8.3.4"
 pytest-sugar = "^1.0.0"
 pytest-django = "^4.9.0"
 factory-boy = "^3.3.1"

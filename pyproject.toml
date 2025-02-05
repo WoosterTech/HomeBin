@@ -167,7 +167,6 @@ extend_exclude = [".*/tests/", ".*/conftest.py", "update_build_number.py"]
 pep621_dev_dependency_groups = ["dev", "test", "docs"]
 
 [tool.deptry.per_rule_ignores]
-DEP004 = ["debug_toolbar"]  # imported in urls when DEBUG is True
 DEP002 = [  # used in settings.INSTALLED_APPS (and others)
     "gunicorn",
     "django-compressor",
@@ -185,6 +184,8 @@ DEP002 = [  # used in settings.INSTALLED_APPS (and others)
     "django-crispy-forms",
     "crispy-bootstrap5",
 ]
+DEP003 = ["typing_extensions"]  # builtin?
+DEP004 = ["debug_toolbar"]  # imported in urls when DEBUG is True
 
 [tool.deptry.package_module_name_map]
 gunicorn = "gunicorn"

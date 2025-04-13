@@ -131,7 +131,7 @@ pre-commit = "^4.1.0"
 django-debug-toolbar = "^5.0.0"
 psycopg = { extras = ["binary"], version = "^3.2.3" }
 deptry = "^0.23.0"
-pytz = "^2024.2"  # used by update_build_number
+pytz = "^2025.2"  # used by update_build_number
 factory-boy = "^3.3.3"
 
 

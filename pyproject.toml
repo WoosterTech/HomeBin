@@ -97,7 +97,7 @@ django-simple-history = "^3.7.0"  # explicit add under django-rubble[history] fo
 psycopg = { extras = ["binary"], version = "^3.2.3" }
 django-cotton = "^1.2.1"
 django-admin-thumbnails = "^0.2.9"
-django-admin-sortable2 = "^2.2.3"
+django-admin-sortable2 = "^2.2.7"
 django-tables2 = "^2.7.0"
 easy-thumbnails = "^2.10"
 iommi = "^7.7.0"

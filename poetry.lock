@@ -1079,7 +1079,7 @@ secrets = ["infisical-python (>=2.3.5)"]
 type = "git"
 url = "https://github.com/WoosterTech/django-rubble.git"
 reference = "HEAD"
-resolved_reference = "cb75e7c87e7b4b669455cba596eaafb9060f5e21"
+resolved_reference = "b63ac891788fa0d159e4210f6b9e65a5fd964921"
 
 [[package]]
 name = "django-simple-history"
@@ -4424,14 +4424,14 @@ watchdog = ["watchdog (>=2.3)"]
 
 [[package]]
 name = "whitenoise"
-version = "6.8.2"
+version = "6.9.0"
 description = "Radically simplified static file serving for WSGI applications"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "whitenoise-6.8.2-py3-none-any.whl", hash = "sha256:df12dce147a043d1956d81d288c6f0044147c6d2ab9726e5772ac50fb45d2280"},
-    {file = "whitenoise-6.8.2.tar.gz", hash = "sha256:486bd7267a375fa9650b136daaec156ac572971acc8bf99add90817a530dd1d4"},
+    {file = "whitenoise-6.9.0-py3-none-any.whl", hash = "sha256:c8a489049b7ee9889617bb4c274a153f3d979e8f51d2efd0f5b403caf41c57df"},
+    {file = "whitenoise-6.9.0.tar.gz", hash = "sha256:8c4a7c9d384694990c26f3047e118c691557481d624f069b7f7752a2f735d609"},
 ]
 
 [package.extras]

@@ -150,24 +150,21 @@ files = [
 ]
 
 [[package]]
-name = "AttrMagic"
-version = "0.1.1b5"
+name = "attrmagic"
+version = "0.2.2"
 description = "Query-like access to nested attributes"
 optional = false
 python-versions = "<4.0,>=3.11"
 groups = ["main"]
-files = []
-develop = false
+files = [
+    {file = "attrmagic-0.2.2-py3-none-any.whl", hash = "sha256:3dad80e8ec58cc5896152d89354be87a77f2211490da84d5915ee4abfeffcc9d"},
+    {file = "attrmagic-0.2.2.tar.gz", hash = "sha256:d961093e4bd6a32fb5c03b8d66361d2244854ee78c751ba0cbff7c0ca4471eb4"},
+]
 
 [package.dependencies]
 pydantic = ">=2.7"
+pydantic-core = ">=2.27.2"
 typing-extensions = {version = ">=4.5", markers = "python_full_version < \"3.12.0\""}
-
-[package.source]
-type = "git"
-url = "https://github.com/WoosterTech/AttrMagic.git"
-reference = "HEAD"
-resolved_reference = "e94e653b3992905bb5502d5332755ec5c708c1c4"
 
 [[package]]
 name = "attrs"
@@ -901,14 +898,14 @@ rjsmin = "1.2.2"
 
 [[package]]
 name = "django-cors-headers"
-version = "4.6.0"
+version = "4.9.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "django_cors_headers-4.6.0-py3-none-any.whl", hash = "sha256:8edbc0497e611c24d5150e0055d3b178c6534b8ed826fb6f53b21c63f5d48ba3"},
-    {file = "django_cors_headers-4.6.0.tar.gz", hash = "sha256:14d76b4b4c8d39375baeddd89e4f08899051eeaf177cb02a29bd6eae8cf63aa8"},
+    {file = "django_cors_headers-4.9.0-py3-none-any.whl", hash = "sha256:15c7f20727f90044dcee2216a9fd7303741a864865f0c3657e28b7056f61b449"},
+    {file = "django_cors_headers-4.9.0.tar.gz", hash = "sha256:fe5d7cb59fdc2c8c646ce84b727ac2bca8912a247e6e68e1fb507372178e59e8"},
 ]
 
 [package.dependencies]
@@ -1044,23 +1041,23 @@ hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-rubble"
-version = "0.7.0b6"
+version = "0.7.1"
 description = "Extend django-model-utils and django-extensions."
 optional = false
-python-versions = ">=3.11,<4.0"
+python-versions = "<4.0,>=3.11"
 groups = ["main"]
 files = []
 develop = false
 
 [package.dependencies]
-attrmagic = {git = "https://github.com/WoosterTech/AttrMagic.git"}
+attrmagic = ">=0.2.0"
 case-converter = ">=1.2.0,<2.0.0"
 croniter = ">=3.0"
 django = ">4,<5.3"
 django-model-utils = ">=4.5"
-django-simple-history = {version = ">=3.7", optional = true}
+django-simple-history = {version = ">=3.7", optional = true, markers = "extra == \"history\""}
 furl = ">=2.1.3,<3.0.0"
-infisical-python = {version = ">=2.3.5", optional = true}
+infisical-python = {version = ">=2.3.5", optional = true, markers = "extra == \"secrets\""}
 levenshtein = ">=0.26.1,<0.27.0"
 loguru = ">=0.7"
 pydantic = ">=2.7"
@@ -1079,7 +1076,7 @@ secrets = ["infisical-python (>=2.3.5)"]
 type = "git"
 url = "https://github.com/WoosterTech/django-rubble.git"
 reference = "HEAD"
-resolved_reference = "b63ac891788fa0d159e4210f6b9e65a5fd964921"
+resolved_reference = "aa7e4506762a6a540ff7a2fb8e53c4cbe5545d18"
 
 [[package]]
 name = "django-simple-history"

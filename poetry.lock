@@ -150,24 +150,21 @@ files = [
 ]
 
 [[package]]
-name = "AttrMagic"
-version = "0.1.1b5"
+name = "attrmagic"
+version = "0.2.2"
 description = "Query-like access to nested attributes"
 optional = false
 python-versions = "<4.0,>=3.11"
 groups = ["main"]
-files = []
-develop = false
+files = [
+    {file = "attrmagic-0.2.2-py3-none-any.whl", hash = "sha256:3dad80e8ec58cc5896152d89354be87a77f2211490da84d5915ee4abfeffcc9d"},
+    {file = "attrmagic-0.2.2.tar.gz", hash = "sha256:d961093e4bd6a32fb5c03b8d66361d2244854ee78c751ba0cbff7c0ca4471eb4"},
+]
 
 [package.dependencies]
 pydantic = ">=2.7"
+pydantic-core = ">=2.27.2"
 typing-extensions = {version = ">=4.5", markers = "python_full_version < \"3.12.0\""}
-
-[package.source]
-type = "git"
-url = "https://github.com/WoosterTech/AttrMagic.git"
-reference = "HEAD"
-resolved_reference = "e94e653b3992905bb5502d5332755ec5c708c1c4"
 
 [[package]]
 name = "attrs"
@@ -822,27 +819,31 @@ dev = ["flake8 (>=3.7.7)", "setuptools (>=41.0.0)", "twine (>=1.13.0)", "wheel (
 
 [[package]]
 name = "django-allauth"
-version = "65.3.1"
+version = "65.16.1"
 description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "django_allauth-65.3.1.tar.gz", hash = "sha256:e02e951b71a2753a746459f2efa114c7c72bf2cef6887dbe8607a577c0350587"},
+    {file = "django_allauth-65.16.1-py3-none-any.whl", hash = "sha256:e49df24056bf37c44e56aaad1e51f78994b7d175bc3476d65e8f8f58390a8ce8"},
+    {file = "django_allauth-65.16.1.tar.gz", hash = "sha256:4425ac3088541c4c54983e16e08f6e3eb9f438dc1b1009534fa51c8bb739ed31"},
 ]
 
 [package.dependencies]
 asgiref = ">=3.8.1"
 Django = ">=4.2.16"
-fido2 = {version = ">=1.1.2", optional = true, markers = "extra == \"mfa\""}
-qrcode = {version = ">=7.0.0", optional = true, markers = "extra == \"mfa\""}
+fido2 = {version = ">=1.1.2,<3", optional = true, markers = "extra == \"mfa\""}
+qrcode = {version = ">=7.0.0,<9", optional = true, markers = "extra == \"mfa\""}
 
 [package.extras]
-mfa = ["fido2 (>=1.1.2)", "qrcode (>=7.0.0)"]
-openid = ["python3-openid (>=3.0.8)"]
+headless = ["pyjwt[crypto] (>=2.0,<3)"]
+headless-spec = ["PyYAML (>=6,<7)"]
+idp-oidc = ["oauthlib (>=3.3.0,<4)", "pyjwt[crypto] (>=2.0,<3)"]
+mfa = ["fido2 (>=1.1.2,<3)", "qrcode (>=7.0.0,<9)"]
+openid = ["python3-openid (>=3.0.8,<4)"]
 saml = ["python3-saml (>=1.15.0,<2.0.0)"]
-socialaccount = ["pyjwt[crypto] (>=1.7)", "requests (>=2.0.0)", "requests-oauthlib (>=0.3.0)"]
-steam = ["python3-openid (>=3.0.8)"]
+socialaccount = ["oauthlib (>=3.3.0,<4)", "pyjwt[crypto] (>=2.0,<3)", "requests (>=2.0.0,<3)"]
+steam = ["python3-openid (>=3.0.8,<4)"]
 
 [[package]]
 name = "django-anymail"
@@ -1044,23 +1045,23 @@ hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-rubble"
-version = "0.7.0b6"
+version = "0.7.1"
 description = "Extend django-model-utils and django-extensions."
 optional = false
-python-versions = ">=3.11,<4.0"
+python-versions = "<4.0,>=3.11"
 groups = ["main"]
 files = []
 develop = false
 
 [package.dependencies]
-attrmagic = {git = "https://github.com/WoosterTech/AttrMagic.git"}
+attrmagic = ">=0.2.0"
 case-converter = ">=1.2.0,<2.0.0"
 croniter = ">=3.0"
 django = ">4,<5.3"
 django-model-utils = ">=4.5"
-django-simple-history = {version = ">=3.7", optional = true}
+django-simple-history = {version = ">=3.7", optional = true, markers = "extra == \"history\""}
 furl = ">=2.1.3,<3.0.0"
-infisical-python = {version = ">=2.3.5", optional = true}
+infisical-python = {version = ">=2.3.5", optional = true, markers = "extra == \"secrets\""}
 levenshtein = ">=0.26.1,<0.27.0"
 loguru = ">=0.7"
 pydantic = ">=2.7"
@@ -1079,7 +1080,7 @@ secrets = ["infisical-python (>=2.3.5)"]
 type = "git"
 url = "https://github.com/WoosterTech/django-rubble.git"
 reference = "HEAD"
-resolved_reference = "b63ac891788fa0d159e4210f6b9e65a5fd964921"
+resolved_reference = "aa7e4506762a6a540ff7a2fb8e53c4cbe5545d18"
 
 [[package]]
 name = "django-simple-history"
